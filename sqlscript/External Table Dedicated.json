@@ -1,0 +1,17 @@
+{
+	"name": "External Table Dedicated",
+	"properties": {
+		"content": {
+			"query": "-- CLAVE MASTER\nCREATE MASTER KEY ENCRYPTION BY PASSWORD = 'rNeaTjNGREGfabpYmog4RfR5OKxnkIAy'\nGO\n\n-- Credencial\nCREATE DATABASE SCOPED CREDENTIAL AzureCredential\nWITH \n \tIDENTITY = 'SHARED ACCESS SIGNATURE', \n \tSECRET = 'sv=2020-08-04&ss=bfqt&srt=s&sp=rwdlacupx&se=2022-02-09T06:01:56Z&st=2022-02-08T22:01:56Z&spr=https&sig=l3su5AXJ1x8hX5FeS7YpF56FgiG0MNWnfKsj1Sf1rHo%3D'\nGO\n\nDROP EXTERNAL DATA SOURCE chicago\nGO\n\n-- Creación del Data Source\nCREATE EXTERNAL DATA SOURCE chicago\nWITH (\n\tTYPE = HADOOP ,\n\tLOCATION = 'abfss://synapse@adlrjzs.dfs.core.windows.net',\n\tCREDENTIAL = AzureCredential \n)\nGO\n\n-- Creación del formato de fichero\nCREATE EXTERNAL FILE FORMAT chicago\nWITH\n(  \n    FORMAT_TYPE = PARQUET,\n    DATA_COMPRESSION = 'org.apache.hadoop.io.compress.SnappyCodec'\n)\n\n-- Create external table\nCREATE EXTERNAL TABLE chicago\n(\n    datatype varchar(20),\n    datasubtype varchar(20)\n)  \nWITH (\n    LOCATION = '/parquet/',\n    DATA_SOURCE = chicago,  \n    FILE_FORMAT = chicago\n)\nGO\n\n\n\n\nCREATE EXTERNAL TABLE [dbo].[chicago_source]\n(\n\t [Id] INT\n)\nWITH\n(\n\tLOCATION = 'https://adlrjzs.blob.core.windows.net/synapse/raw/sample/chicago/_started_6745340990285432122_00000.parquet',\n\tDATA_SOURCE = [DataSource1],\n\tFILE_FORMAT = [FileFormat1]\n)\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "sql_dedicated",
+				"poolName": "sql_dedicated"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

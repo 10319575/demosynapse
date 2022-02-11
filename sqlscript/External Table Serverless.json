@@ -1,0 +1,17 @@
+{
+	"name": "External Table Serverless",
+	"properties": {
+		"content": {
+			"query": "-- CLAVE MASTER\nCREATE MASTER KEY ENCRYPTION BY PASSWORD = 'rNeaTjNGREGfabpYmog4RfR5OKxnkIAy'\nGO\n\ndrop database scoped credential azurecredential\n\n-- Credencial\nCREATE DATABASE SCOPED CREDENTIAL AzureCredential\nWITH \n \tIDENTITY = 'SHARED ACCESS SIGNATURE', \n \tSECRET = 'sv=2020-08-04&ss=bfqt&srt=s&sp=rwdlacupx&se=2022-02-09T06:01:56Z&st=2022-02-08T22:01:56Z&spr=https&sig=l3su5AXJ1x8hX5FeS7YpF56FgiG0MNWnfKsj1Sf1rHo%3D'\nGO\n\nDROP EXTERNAL DATA SOURCE chicago\nGO\n\n-- Creación del Data Source\nCREATE EXTERNAL DATA SOURCE chicago\nWITH (\n\tLOCATION = 'abfss://synapse@adlrjzs.dfs.core.windows.net',\n\tCREDENTIAL = AzureCredential \n)\nGO\n\nDROP EXTERNAL FILE FORMAT chicago\n\n-- Creación del formato de fichero\nCREATE EXTERNAL FILE FORMAT chicago\nWITH\n(  \n    FORMAT_TYPE = PARQUET,\n    DATA_COMPRESSION = 'org.apache.hadoop.io.compress.SnappyCodec'\n)\n\ndrop external table chicago\ngo\n\nCREATE EXTERNAL TABLE chicago (\n\t[dataType] nvarchar(4000),\n\t[dataSubtype] nvarchar(4000),\n\t[dateTime] datetime2(7),\n\t[category] nvarchar(4000),\n\t[subcategory] nvarchar(4000),\n\t[status] nvarchar(4000),\n\t[address] nvarchar(4000),\n\t[latitude] float,\n\t[longitude] float,\n\t[source] nvarchar(4000),\n\t[extendedProperties] nvarchar(4000)\n\t)\n\tWITH (\n\tLOCATION = 'raw/sample/chicago/*.parquet',\n\tDATA_SOURCE = [synapse_adlrjzs_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nselect top 10 * from chicago\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "sample",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
