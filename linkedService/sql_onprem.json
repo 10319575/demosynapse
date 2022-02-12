@@ -6,10 +6,10 @@
 		"type": "SqlServer",
 		"typeProperties": {
 			"connectionString": "integrated security=False;data source=LAPTOP-A16FD636;initial catalog=AdventureWorks2019;user id=user_ro",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIxNDQxM2NjZi0wMWQ3LTQxM2ItYTg4MC1jZTIxMjUwOGQwMGIiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJhMDI4N2RmZi03YmQzLTQwMjAtOTAxZi03ZWM3ZGNjNzQwNjgiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
-			"referenceName": "irrjz",
+			"referenceName": "irdemosynapse",
 			"type": "IntegrationRuntimeReference"
 		}
 	}
