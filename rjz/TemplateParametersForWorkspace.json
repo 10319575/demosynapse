@@ -8,11 +8,14 @@
 		"rjz-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
-		"rjz-WorkspaceDefaultStorage_properties_typeProperties_url": {
-			"value": "https://adlrjzs.dfs.core.windows.net"
+		"sql_onprem_connectionString": {
+			"value": ""
 		},
 		"city_safety_chicago_sasUri": {
 			"value": ""
+		},
+		"rjz-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://adlrjzs.dfs.core.windows.net"
 		}
 	}
 }
