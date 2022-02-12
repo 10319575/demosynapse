@@ -42,9 +42,9 @@
 									"physicalType": "int"
 								},
 								"sink": {
+									"name": "SalesOrderID",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 1
+									"physicalType": "String"
 								}
 							},
 							{
@@ -54,9 +54,9 @@
 									"physicalType": "tinyint"
 								},
 								"sink": {
+									"name": "RevisionNumber",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 2
+									"physicalType": "String"
 								}
 							},
 							{
@@ -66,9 +66,9 @@
 									"physicalType": "datetime"
 								},
 								"sink": {
+									"name": "OrderDate",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 3
+									"physicalType": "String"
 								}
 							},
 							{
@@ -78,9 +78,9 @@
 									"physicalType": "datetime"
 								},
 								"sink": {
+									"name": "DueDate",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 4
+									"physicalType": "String"
 								}
 							},
 							{
@@ -90,9 +90,9 @@
 									"physicalType": "datetime"
 								},
 								"sink": {
+									"name": "ShipDate",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 5
+									"physicalType": "String"
 								}
 							},
 							{
@@ -102,9 +102,9 @@
 									"physicalType": "tinyint"
 								},
 								"sink": {
+									"name": "Status",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 6
+									"physicalType": "String"
 								}
 							},
 							{
@@ -114,9 +114,9 @@
 									"physicalType": "bit"
 								},
 								"sink": {
+									"name": "OnlineOrderFlag",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 7
+									"physicalType": "String"
 								}
 							},
 							{
@@ -126,9 +126,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
+									"name": "SalesOrderNumber",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 8
+									"physicalType": "String"
 								}
 							},
 							{
@@ -138,9 +138,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
+									"name": "PurchaseOrderNumber",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 9
+									"physicalType": "String"
 								}
 							},
 							{
@@ -150,9 +150,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
+									"name": "AccountNumber",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 10
+									"physicalType": "String"
 								}
 							},
 							{
@@ -162,9 +162,9 @@
 									"physicalType": "int"
 								},
 								"sink": {
+									"name": "CustomerID",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 11
+									"physicalType": "String"
 								}
 							},
 							{
@@ -174,9 +174,9 @@
 									"physicalType": "int"
 								},
 								"sink": {
+									"name": "SalesPersonID",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 12
+									"physicalType": "String"
 								}
 							},
 							{
@@ -186,9 +186,9 @@
 									"physicalType": "int"
 								},
 								"sink": {
+									"name": "TerritoryID",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 13
+									"physicalType": "String"
 								}
 							},
 							{
@@ -198,9 +198,9 @@
 									"physicalType": "int"
 								},
 								"sink": {
+									"name": "BillToAddressID",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 14
+									"physicalType": "String"
 								}
 							},
 							{
@@ -210,9 +210,9 @@
 									"physicalType": "int"
 								},
 								"sink": {
+									"name": "ShipToAddressID",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 15
+									"physicalType": "String"
 								}
 							},
 							{
@@ -222,9 +222,9 @@
 									"physicalType": "int"
 								},
 								"sink": {
+									"name": "ShipMethodID",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 16
+									"physicalType": "String"
 								}
 							},
 							{
@@ -234,9 +234,9 @@
 									"physicalType": "int"
 								},
 								"sink": {
+									"name": "CreditCardID",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 17
+									"physicalType": "String"
 								}
 							},
 							{
@@ -246,9 +246,9 @@
 									"physicalType": "varchar"
 								},
 								"sink": {
+									"name": "CreditCardApprovalCode",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 18
+									"physicalType": "String"
 								}
 							},
 							{
@@ -258,9 +258,9 @@
 									"physicalType": "int"
 								},
 								"sink": {
+									"name": "CurrencyRateID",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 19
+									"physicalType": "String"
 								}
 							},
 							{
@@ -272,9 +272,9 @@
 									"precision": 19
 								},
 								"sink": {
+									"name": "SubTotal",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 20
+									"physicalType": "String"
 								}
 							},
 							{
@@ -286,9 +286,9 @@
 									"precision": 19
 								},
 								"sink": {
+									"name": "TaxAmt",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 21
+									"physicalType": "String"
 								}
 							},
 							{
@@ -300,9 +300,9 @@
 									"precision": 19
 								},
 								"sink": {
+									"name": "Freight",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 22
+									"physicalType": "String"
 								}
 							},
 							{
@@ -314,9 +314,9 @@
 									"precision": 19
 								},
 								"sink": {
+									"name": "TotalDue",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 23
+									"physicalType": "String"
 								}
 							},
 							{
@@ -326,9 +326,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
+									"name": "Comment",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 24
+									"physicalType": "String"
 								}
 							},
 							{
@@ -338,9 +338,9 @@
 									"physicalType": "uniqueidentifier"
 								},
 								"sink": {
+									"name": "rowguid",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 25
+									"physicalType": "String"
 								}
 							},
 							{
@@ -350,9 +350,9 @@
 									"physicalType": "datetime"
 								},
 								"sink": {
+									"name": "ModifiedDate",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 26
+									"physicalType": "String"
 								}
 							}
 						],
@@ -372,6 +372,198 @@
 				"outputs": [
 					{
 						"referenceName": "adl_raw_Sales_Order_Header",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy data SalesOrderDetail",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".csv"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "SalesOrderID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "SalesOrderID",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SalesOrderDetailID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "SalesOrderDetailID",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CarrierTrackingNumber",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "CarrierTrackingNumber",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "OrderQty",
+									"type": "Int16",
+									"physicalType": "smallint"
+								},
+								"sink": {
+									"name": "OrderQty",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "ProductID",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SpecialOfferID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "SpecialOfferID",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UnitPrice",
+									"type": "Decimal",
+									"physicalType": "money",
+									"scale": 4,
+									"precision": 19
+								},
+								"sink": {
+									"name": "UnitPrice",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UnitPriceDiscount",
+									"type": "Decimal",
+									"physicalType": "money",
+									"scale": 4,
+									"precision": 19
+								},
+								"sink": {
+									"name": "UnitPriceDiscount",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "LineTotal",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 6,
+									"precision": 38
+								},
+								"sink": {
+									"name": "LineTotal",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "rowguid",
+									"type": "Guid",
+									"physicalType": "uniqueidentifier"
+								},
+								"sink": {
+									"name": "rowguid",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ModifiedDate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								},
+								"sink": {
+									"name": "ModifiedDate",
+									"type": "String",
+									"physicalType": "String"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "src_SalesOrderDetail",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "adl_raw_Sales_Order_Detail",
 						"type": "DatasetReference"
 					}
 				]

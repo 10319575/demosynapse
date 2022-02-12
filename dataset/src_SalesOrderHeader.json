@@ -5,6 +5,9 @@
 			"referenceName": "sql_onprem",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "sales"
+		},
 		"annotations": [],
 		"type": "SqlServerTable",
 		"schema": [
