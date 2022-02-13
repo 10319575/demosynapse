@@ -30,6 +30,10 @@
 		"rjz-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlrjzs.dfs.core.windows.net"
+		},
+		"kvrjz_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kvrjz.vault.azure.net/"
 		}
 	},
 	"variables": {
@@ -1047,7 +1051,15 @@
 				"annotations": [],
 				"type": "SqlServer",
 				"typeProperties": {
-					"connectionString": "[parameters('sql_onprem_connectionString')]"
+					"connectionString": "[parameters('sql_onprem_connectionString')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "kvrjz",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "sqlserver-onpremise-password"
+					}
 				},
 				"connectVia": {
 					"referenceName": "irdemosynapse",
@@ -1055,7 +1067,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/integrationRuntimes/irdemosynapse')]"
+				"[concat(variables('workspaceId'), '/integrationRuntimes/irdemosynapse')]",
+				"[concat(variables('workspaceId'), '/linkedServices/kvrjz')]"
 			]
 		},
 		{
@@ -1078,6 +1091,16 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
+			"type": "Microsoft.Synapse/workspaces/credentials",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/irdemosynapse')]",
 			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
 			"apiVersion": "2019-06-01-preview",
@@ -1088,12 +1111,15 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
-			"type": "Microsoft.Synapse/workspaces/credentials",
+			"name": "[concat(parameters('workspaceName'), '/kvrjz')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
-				"type": "ManagedIdentity",
-				"typeProperties": {}
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('kvrjz_properties_typeProperties_baseUrl')]"
+				}
 			},
 			"dependsOn": []
 		}

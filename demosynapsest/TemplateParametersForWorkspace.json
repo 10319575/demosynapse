@@ -22,6 +22,9 @@
 		},
 		"rjz-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://adlrjzs.dfs.core.windows.net"
+		},
+		"kvrjz_properties_typeProperties_baseUrl": {
+			"value": "https://kvrjz.vault.azure.net/"
 		}
 	}
 }
