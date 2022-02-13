@@ -2,7 +2,7 @@
 	"name": "adl_raw_Sales_Order_Header",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "rjz-WorkspaceDefaultStorage",
+			"referenceName": "demosynapsest-WorkspaceDefaultStorage",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
