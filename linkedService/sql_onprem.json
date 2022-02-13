@@ -4,7 +4,8 @@
 		"annotations": [],
 		"type": "SqlServer",
 		"typeProperties": {
-			"connectionString": {
+			"connectionString": "Integrated Security=False;Data Source=sqlserver.stratebi.com;Initial Catalog=AdventureWorks2019;User ID=adventureworks_user_ro",
+			"password": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
 					"referenceName": "kvrjz",
