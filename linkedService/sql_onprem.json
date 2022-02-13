@@ -1,16 +1,22 @@
 {
 	"name": "sql_onprem",
-	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "SqlServer",
 		"typeProperties": {
-			"connectionString": "integrated security=False;data source=LAPTOP-A16FD636;initial catalog=AdventureWorks2019;user id=user_ro",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJhMDI4N2RmZi03YmQzLTQwMjAtOTAxZi03ZWM3ZGNjNzQwNjgiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "kvrjz",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "sqlserver-onpremise-password"
+			}
 		},
 		"connectVia": {
 			"referenceName": "irdemosynapse",
 			"type": "IntegrationRuntimeReference"
 		}
-	}
+	},
+	"type": "Microsoft.Synapse/workspaces/linkedservices"
 }
