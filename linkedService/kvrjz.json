@@ -1,0 +1,10 @@
+{
+	"name": "kvrjz",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kvrjz.vault.azure.net/"
+		}
+	}
+}
