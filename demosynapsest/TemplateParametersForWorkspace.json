@@ -8,9 +8,6 @@
 		"demosynapsest-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
-		"rjz-WorkspaceDefaultSqlServer_connectionString": {
-			"value": ""
-		},
 		"sql_onprem_connectionString": {
 			"value": ""
 		},
@@ -18,9 +15,6 @@
 			"value": ""
 		},
 		"demosynapsest-WorkspaceDefaultStorage_properties_typeProperties_url": {
-			"value": "https://adlrjzs.dfs.core.windows.net"
-		},
-		"rjz-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://adlrjzs.dfs.core.windows.net"
 		},
 		"kvrjz_properties_typeProperties_baseUrl": {

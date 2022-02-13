@@ -11,10 +11,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'demosynapsest-WorkspaceDefaultSqlServer'"
 		},
-		"rjz-WorkspaceDefaultSqlServer_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'rjz-WorkspaceDefaultSqlServer'"
-		},
 		"sql_onprem_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'sql_onprem'"
@@ -24,10 +20,6 @@
 			"metadata": "Secure string for 'sasUri' of 'city_safety_chicago'"
 		},
 		"demosynapsest-WorkspaceDefaultStorage_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://adlrjzs.dfs.core.windows.net"
-		},
-		"rjz-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlrjzs.dfs.core.windows.net"
 		},
@@ -636,7 +628,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "rjz-WorkspaceDefaultStorage",
+					"referenceName": "demosynapsest-WorkspaceDefaultStorage",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -658,7 +650,7 @@
 				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/rjz-WorkspaceDefaultStorage')]"
+				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
 			]
 		},
 		{
@@ -667,7 +659,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "rjz-WorkspaceDefaultStorage",
+					"referenceName": "demosynapsest-WorkspaceDefaultStorage",
 					"type": "LinkedServiceReference"
 				},
 				"folder": {
@@ -689,7 +681,7 @@
 				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/rjz-WorkspaceDefaultStorage')]"
+				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
 			]
 		},
 		{
@@ -990,49 +982,6 @@
 				"type": "AzureBlobFS",
 				"typeProperties": {
 					"url": "[parameters('demosynapsest-WorkspaceDefaultStorage_properties_typeProperties_url')]"
-				},
-				"connectVia": {
-					"referenceName": "AutoResolveIntegrationRuntime",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/rjz-WorkspaceDefaultSqlServer')]",
-			"type": "Microsoft.Synapse/workspaces/linkedServices",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"parameters": {
-					"DBName": {
-						"type": "String"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlDW",
-				"typeProperties": {
-					"connectionString": "[parameters('rjz-WorkspaceDefaultSqlServer_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "AutoResolveIntegrationRuntime",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/rjz-WorkspaceDefaultStorage')]",
-			"type": "Microsoft.Synapse/workspaces/linkedServices",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('rjz-WorkspaceDefaultStorage_properties_typeProperties_url')]"
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
