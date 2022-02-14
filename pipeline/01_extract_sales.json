@@ -406,36 +406,12 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "CustomerID",
+									"name": "BusinessEntityID",
 									"type": "Int32",
 									"physicalType": "int"
 								},
 								"sink": {
-									"name": "CustomerID",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "PersonID",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "PersonID",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "StoreID",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "StoreID",
+									"name": "BusinessEntityID",
 									"type": "String",
 									"physicalType": "String"
 								}
@@ -454,24 +430,42 @@
 							},
 							{
 								"source": {
-									"name": "AccountNumber",
-									"type": "String",
-									"physicalType": "varchar"
+									"name": "SalesQuota",
+									"type": "Decimal",
+									"physicalType": "money",
+									"scale": 4,
+									"precision": 19
 								},
 								"sink": {
-									"name": "AccountNumber",
+									"name": "SalesQuota",
 									"type": "String",
 									"physicalType": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "ModifiedDate",
-									"type": "DateTime",
-									"physicalType": "datetime"
+									"name": "Bonus",
+									"type": "Decimal",
+									"physicalType": "money",
+									"scale": 4,
+									"precision": 19
 								},
 								"sink": {
-									"name": "ModifiedDate",
+									"name": "Bonus",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CommissionPct",
+									"type": "Decimal",
+									"physicalType": "smallmoney",
+									"scale": 4,
+									"precision": 10
+								},
+								"sink": {
+									"name": "CommissionPct",
 									"type": "String",
 									"physicalType": "String"
 								}
