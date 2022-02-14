@@ -279,78 +279,6 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "SalesOrderID",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "SalesOrderID",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "OrderDate",
-									"type": "DateTime",
-									"physicalType": "datetime"
-								},
-								"sink": {
-									"name": "OrderDate",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "DueDate",
-									"type": "DateTime",
-									"physicalType": "datetime"
-								},
-								"sink": {
-									"name": "DueDate",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "ShipDate",
-									"type": "DateTime",
-									"physicalType": "datetime"
-								},
-								"sink": {
-									"name": "ShipDate",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Status",
-									"type": "Byte",
-									"physicalType": "tinyint"
-								},
-								"sink": {
-									"name": "Status",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "OnlineOrderFlag",
-									"type": "Boolean",
-									"physicalType": "bit"
-								},
-								"sink": {
-									"name": "OnlineOrderFlag",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
 									"name": "CustomerID",
 									"type": "Int32",
 									"physicalType": "int"
@@ -363,12 +291,24 @@
 							},
 							{
 								"source": {
-									"name": "SalesPersonID",
+									"name": "PersonID",
 									"type": "Int32",
 									"physicalType": "int"
 								},
 								"sink": {
-									"name": "SalesPersonID",
+									"name": "PersonID",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "StoreID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "StoreID",
 									"type": "String",
 									"physicalType": "String"
 								}
@@ -387,78 +327,24 @@
 							},
 							{
 								"source": {
-									"name": "ShipMethodID",
-									"type": "Int32",
-									"physicalType": "int"
+									"name": "AccountNumber",
+									"type": "String",
+									"physicalType": "varchar"
 								},
 								"sink": {
-									"name": "ShipMethodID",
+									"name": "AccountNumber",
 									"type": "String",
 									"physicalType": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "ProductID",
-									"type": "Int32",
-									"physicalType": "int"
+									"name": "ModifiedDate",
+									"type": "DateTime",
+									"physicalType": "datetime"
 								},
 								"sink": {
-									"name": "ProductID",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "OrderQty",
-									"type": "Int16",
-									"physicalType": "smallint"
-								},
-								"sink": {
-									"name": "OrderQty",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "UnitPrice",
-									"type": "Decimal",
-									"physicalType": "money",
-									"scale": 4,
-									"precision": 19
-								},
-								"sink": {
-									"name": "UnitPrice",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "UnitPriceDiscount",
-									"type": "Decimal",
-									"physicalType": "money",
-									"scale": 4,
-									"precision": 19
-								},
-								"sink": {
-									"name": "UnitPriceDiscount",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "LineTotal",
-									"type": "Decimal",
-									"physicalType": "decimal",
-									"scale": 6,
-									"precision": 38
-								},
-								"sink": {
-									"name": "LineTotal",
+									"name": "ModifiedDate",
 									"type": "String",
 									"physicalType": "String"
 								}
