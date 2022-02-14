@@ -800,7 +800,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "adl_raw_territory",
+						"referenceName": "adl_raw_shipmethod",
 						"type": "DatasetReference"
 					}
 				]
@@ -1149,7 +1149,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "adl_raw_territory",
+						"referenceName": "adl_raw_product",
 						"type": "DatasetReference"
 					}
 				]
