@@ -1,5 +1,5 @@
 {
-	"name": "src_SalesOrderHeader",
+	"name": "src_Sales",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "sql_onprem",

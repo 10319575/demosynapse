@@ -1,9 +1,9 @@
 {
-	"name": "extract_data",
+	"name": "01_extract_sales",
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data SalesOrderHeader",
+				"name": "Copy data Sales",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -17,6 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT h.[SalesOrderID]\n      ,[OrderDate]\n      ,[DueDate]\n      ,[ShipDate]\n      ,[Status]\n      ,[OnlineOrderFlag]\n      ,[CustomerID]\n      ,[SalesPersonID]\n      ,[TerritoryID]\n      ,[ShipMethodID]      \n\t  ,[ProductID]\n\t  ,[OrderQty]\n      ,[UnitPrice]\n      ,[UnitPriceDiscount]\n      ,[LineTotal]\n  FROM [AdventureWorks2019].[Sales].[SalesOrderDetail] d\n\tinner join [AdventureWorks2019].[Sales].[SalesOrderHeader] h on d.SalesOrderID = h.SalesOrderID",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -43,18 +44,6 @@
 								},
 								"sink": {
 									"name": "SalesOrderID",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "RevisionNumber",
-									"type": "Byte",
-									"physicalType": "tinyint"
-								},
-								"sink": {
-									"name": "RevisionNumber",
 									"type": "String",
 									"physicalType": "String"
 								}
@@ -121,42 +110,6 @@
 							},
 							{
 								"source": {
-									"name": "SalesOrderNumber",
-									"type": "String",
-									"physicalType": "nvarchar"
-								},
-								"sink": {
-									"name": "SalesOrderNumber",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "PurchaseOrderNumber",
-									"type": "String",
-									"physicalType": "nvarchar"
-								},
-								"sink": {
-									"name": "PurchaseOrderNumber",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "AccountNumber",
-									"type": "String",
-									"physicalType": "nvarchar"
-								},
-								"sink": {
-									"name": "AccountNumber",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
 									"name": "CustomerID",
 									"type": "Int32",
 									"physicalType": "int"
@@ -193,30 +146,6 @@
 							},
 							{
 								"source": {
-									"name": "BillToAddressID",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "BillToAddressID",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "ShipToAddressID",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "ShipToAddressID",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
 									"name": "ShipMethodID",
 									"type": "Int32",
 									"physicalType": "int"
@@ -229,218 +158,12 @@
 							},
 							{
 								"source": {
-									"name": "CreditCardID",
+									"name": "ProductID",
 									"type": "Int32",
 									"physicalType": "int"
 								},
 								"sink": {
-									"name": "CreditCardID",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "CreditCardApprovalCode",
-									"type": "String",
-									"physicalType": "varchar"
-								},
-								"sink": {
-									"name": "CreditCardApprovalCode",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "CurrencyRateID",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "CurrencyRateID",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "SubTotal",
-									"type": "Decimal",
-									"physicalType": "money",
-									"scale": 4,
-									"precision": 19
-								},
-								"sink": {
-									"name": "SubTotal",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "TaxAmt",
-									"type": "Decimal",
-									"physicalType": "money",
-									"scale": 4,
-									"precision": 19
-								},
-								"sink": {
-									"name": "TaxAmt",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Freight",
-									"type": "Decimal",
-									"physicalType": "money",
-									"scale": 4,
-									"precision": 19
-								},
-								"sink": {
-									"name": "Freight",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "TotalDue",
-									"type": "Decimal",
-									"physicalType": "money",
-									"scale": 4,
-									"precision": 19
-								},
-								"sink": {
-									"name": "TotalDue",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Comment",
-									"type": "String",
-									"physicalType": "nvarchar"
-								},
-								"sink": {
-									"name": "Comment",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "rowguid",
-									"type": "Guid",
-									"physicalType": "uniqueidentifier"
-								},
-								"sink": {
-									"name": "rowguid",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "ModifiedDate",
-									"type": "DateTime",
-									"physicalType": "datetime"
-								},
-								"sink": {
-									"name": "ModifiedDate",
-									"type": "String",
-									"physicalType": "String"
-								}
-							}
-						],
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "src_SalesOrderHeader",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "adl_raw_Sales_Order_Header",
-						"type": "DatasetReference"
-					}
-				]
-			},
-			{
-				"name": "Copy data SalesOrderDetail",
-				"type": "Copy",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".csv"
-						}
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "SalesOrderID",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "SalesOrderID",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "SalesOrderDetailID",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "SalesOrderDetailID",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "CarrierTrackingNumber",
-									"type": "String",
-									"physicalType": "nvarchar"
-								},
-								"sink": {
-									"name": "CarrierTrackingNumber",
+									"name": "ProductID",
 									"type": "String",
 									"physicalType": "String"
 								}
@@ -453,30 +176,6 @@
 								},
 								"sink": {
 									"name": "OrderQty",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "ProductID",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "ProductID",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "SpecialOfferID",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "SpecialOfferID",
 									"type": "String",
 									"physicalType": "String"
 								}
@@ -522,27 +221,244 @@
 									"type": "String",
 									"physicalType": "String"
 								}
-							},
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "src_Sales",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "adl_raw_sales",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy data Customer",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT [CustomerID]\n      ,[PersonID]\n      ,[StoreID]\n      ,[TerritoryID]\n      ,[AccountNumber]\n      ,[ModifiedDate]\n  FROM [AdventureWorks2019].[Sales].[Customer]\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".csv"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
 							{
 								"source": {
-									"name": "rowguid",
-									"type": "Guid",
-									"physicalType": "uniqueidentifier"
+									"name": "SalesOrderID",
+									"type": "Int32",
+									"physicalType": "int"
 								},
 								"sink": {
-									"name": "rowguid",
+									"name": "SalesOrderID",
 									"type": "String",
 									"physicalType": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "ModifiedDate",
+									"name": "OrderDate",
 									"type": "DateTime",
 									"physicalType": "datetime"
 								},
 								"sink": {
-									"name": "ModifiedDate",
+									"name": "OrderDate",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DueDate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								},
+								"sink": {
+									"name": "DueDate",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ShipDate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								},
+								"sink": {
+									"name": "ShipDate",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Status",
+									"type": "Byte",
+									"physicalType": "tinyint"
+								},
+								"sink": {
+									"name": "Status",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "OnlineOrderFlag",
+									"type": "Boolean",
+									"physicalType": "bit"
+								},
+								"sink": {
+									"name": "OnlineOrderFlag",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CustomerID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "CustomerID",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SalesPersonID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "SalesPersonID",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TerritoryID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "TerritoryID",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ShipMethodID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "ShipMethodID",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "ProductID",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "OrderQty",
+									"type": "Int16",
+									"physicalType": "smallint"
+								},
+								"sink": {
+									"name": "OrderQty",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UnitPrice",
+									"type": "Decimal",
+									"physicalType": "money",
+									"scale": 4,
+									"precision": 19
+								},
+								"sink": {
+									"name": "UnitPrice",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UnitPriceDiscount",
+									"type": "Decimal",
+									"physicalType": "money",
+									"scale": 4,
+									"precision": 19
+								},
+								"sink": {
+									"name": "UnitPriceDiscount",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "LineTotal",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 6,
+									"precision": 38
+								},
+								"sink": {
+									"name": "LineTotal",
 									"type": "String",
 									"physicalType": "String"
 								}
@@ -557,18 +473,21 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "src_SalesOrderDetail",
+						"referenceName": "src_customers",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "adl_raw_Sales_Order_Detail",
+						"referenceName": "adl_raw_customers",
 						"type": "DatasetReference"
 					}
 				]
 			}
 		],
+		"folder": {
+			"name": "AdventureWorks"
+		},
 		"annotations": []
 	}
 }
