@@ -1,5 +1,5 @@
 {
-	"name": "adl_raw_Sales_Order_Header",
+	"name": "adl_raw_sales",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "demosynapsest-WorkspaceDefaultStorage",
@@ -13,6 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "sales",
 				"folderPath": "raw/sales",
 				"fileSystem": "synapse"
 			},
