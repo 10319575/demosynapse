@@ -5,6 +5,9 @@
 			"referenceName": "demosynapsest-WorkspaceDefaultStorage",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "sales/adl"
+		},
 		"annotations": [],
 		"type": "Parquet",
 		"typeProperties": {
