@@ -1,5 +1,5 @@
 {
-	"name": "02_transform_to_applicatin",
+	"name": "02_move_to_applicatin",
 	"properties": {
 		"activities": [
 			{
@@ -127,12 +127,15 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Parquet1",
+						"referenceName": "adl_app_customers",
 						"type": "DatasetReference"
 					}
 				]
 			}
 		],
+		"folder": {
+			"name": "AdventureWorks"
+		},
 		"annotations": []
 	}
 }
