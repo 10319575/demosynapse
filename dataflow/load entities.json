@@ -12,6 +12,10 @@
 					"name": "Customers"
 				},
 				{
+					"dataset": {
+						"referenceName": "adl_app_salesperson",
+						"type": "DatasetReference"
+					},
 					"name": "SalesPerson"
 				}
 			],
@@ -39,7 +43,7 @@
 					"name": "SurrogateKeySalesPerson"
 				}
 			],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Customers\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> SalesPerson\nCustomers keyGenerate(output(id_sk_customer as long),\n\tstartAt: 1L) ~> SurrogateKeyCustomers\nSalesPerson keyGenerate(output(id_sk_salesperson as long),\n\tstartAt: 1L) ~> SurrogateKeySalesPerson\nSurrogateKeyCustomers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['customers'],\n\ttruncate: true,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appcustomers\nSurrogateKeySalesPerson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['salesperson'],\n\ttruncate: true,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appsalesperson"
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Customers\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> SalesPerson\nCustomers keyGenerate(output(id_sk_customer as long),\n\tstartAt: 1L) ~> SurrogateKeyCustomers\nSalesPerson keyGenerate(output(id_sk_salesperson as long),\n\tstartAt: 1L) ~> SurrogateKeySalesPerson\nSurrogateKeyCustomers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['customers'],\n\ttruncate: true,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appcustomers\nSurrogateKeySalesPerson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['salesperson'],\n\ttruncate: true,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appsalesperson"
 		}
 	}
 }
