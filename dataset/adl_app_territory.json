@@ -1,0 +1,24 @@
+{
+	"name": "adl_app_territory",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "demosynapsest-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "sales/adl"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "territory",
+				"folderPath": "application/sales",
+				"fileSystem": "synapse"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
