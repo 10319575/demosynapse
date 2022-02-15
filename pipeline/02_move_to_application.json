@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "load_dimensions",
+						"referenceName": "generate entities",
 						"type": "DataFlowReference"
 					},
 					"compute": {
