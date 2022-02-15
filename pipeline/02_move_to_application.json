@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Load Dimensions",
+				"name": "Load Entities",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
