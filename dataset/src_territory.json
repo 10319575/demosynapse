@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "sales"
+			"name": "sales/src"
 		},
 		"annotations": [],
 		"type": "SqlServerTable",
