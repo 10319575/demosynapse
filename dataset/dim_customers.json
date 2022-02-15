@@ -1,12 +1,15 @@
 {
-	"name": "AzureSynapseAnalyticsTable1",
+	"name": "dim_customers",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "demosynapsest-WorkspaceDefaultSqlServer",
 			"type": "LinkedServiceReference",
 			"parameters": {
-				"DBName": "demosynapsest-WorkspaceDefaultSqlServer"
+				"DBName": "dedicateddemosynapse"
 			}
+		},
+		"folder": {
+			"name": "sales/dw"
 		},
 		"annotations": [],
 		"type": "AzureSqlDWTable",
