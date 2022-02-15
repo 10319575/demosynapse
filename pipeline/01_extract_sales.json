@@ -506,7 +506,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "SELECT TOP (1000) [TerritoryID]\n      ,[Name]\n      ,[CountryRegionCode]\n      ,[Group]\n      ,[SalesYTD]\n      ,[SalesLastYear]\n      ,[CostYTD]\n      ,[CostLastYear]\n      ,[rowguid]\n      ,[ModifiedDate]\n  FROM [AdventureWorks2019].[Sales].[SalesTerritory]",
+						"sqlReaderQuery": "SELECT [TerritoryID]\n      ,[Name]\n      ,[CountryRegionCode]\n      ,[Group]\n      ,[SalesYTD]\n      ,[SalesLastYear]\n      ,[CostYTD]\n      ,[CostLastYear]\n      ,[rowguid]\n      ,[ModifiedDate]\n  FROM [AdventureWorks2019].[Sales].[SalesTerritory]",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -820,7 +820,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "SELECT TOP (1000) [ProductID]\n      ,p.[Name]\n      ,[ProductNumber]\n      ,[MakeFlag]\n      ,[FinishedGoodsFlag]\n      ,[Color]\n      ,[SafetyStockLevel]\n      ,[ReorderPoint]\n      ,[StandardCost]\n      ,[ListPrice]\n      ,[Size]\n      ,[SizeUnitMeasureCode]\n      ,[WeightUnitMeasureCode]\n      ,[Weight]\n      ,[DaysToManufacture]\n      ,[ProductLine]\n      ,[Class]\n      ,[Style]\n      ,[ProductModelID]\n      ,[SellStartDate]\n      ,[SellEndDate]\n      ,[DiscontinuedDate]   \n\t  ,c.Name as ProductCategory\n\t  ,s.Name as ProductSubcategory\n  FROM [AdventureWorks2019].[Production].[Product] p\n\t\tinner join [AdventureWorks2019].[Production].ProductSubcategory s on s.ProductSubcategoryID = p.ProductSubcategoryID\n\t\tinner join [AdventureWorks2019].[Production].ProductCategory c on s.ProductCategoryID = c.ProductCategoryID",
+						"sqlReaderQuery": "SELECT [ProductID]\n      ,p.[Name]\n      ,[ProductNumber]\n      ,[MakeFlag]\n      ,[FinishedGoodsFlag]\n      ,[Color]\n      ,[SafetyStockLevel]\n      ,[ReorderPoint]\n      ,[StandardCost]\n      ,[ListPrice]\n      ,[Size]\n      ,[SizeUnitMeasureCode]\n      ,[WeightUnitMeasureCode]\n      ,[Weight]\n      ,[DaysToManufacture]\n      ,[ProductLine]\n      ,[Class]\n      ,[Style]\n      ,[ProductModelID]\n      ,[SellStartDate]\n      ,[SellEndDate]\n      ,[DiscontinuedDate]   \n\t  ,c.Name as ProductCategory\n\t  ,s.Name as ProductSubcategory\n  FROM [AdventureWorks2019].[Production].[Product] p\n\t\tinner join [AdventureWorks2019].[Production].ProductSubcategory s on s.ProductSubcategoryID = p.ProductSubcategoryID\n\t\tinner join [AdventureWorks2019].[Production].ProductCategory c on s.ProductCategoryID = c.ProductCategoryID",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},

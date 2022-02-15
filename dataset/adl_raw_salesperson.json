@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "sales"
+			"name": "sales/adl"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
