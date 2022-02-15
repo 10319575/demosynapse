@@ -17,6 +17,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "SalesPerson"
+				},
+				{
+					"dataset": {
+						"referenceName": "adl_raw_territory",
+						"type": "DatasetReference"
+					},
+					"name": "Territory"
 				}
 			],
 			"sinks": [
@@ -33,6 +40,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "appsalesperson"
+				},
+				{
+					"dataset": {
+						"referenceName": "adl_app_territory",
+						"type": "DatasetReference"
+					},
+					"name": "appTerritory"
 				}
 			],
 			"transformations": [
@@ -41,9 +55,12 @@
 				},
 				{
 					"name": "SurrogateKeySalesPerson"
+				},
+				{
+					"name": "SurrogateKeyTerritory"
 				}
 			],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Customers\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> SalesPerson\nCustomers keyGenerate(output(id_sk_customer as long),\n\tstartAt: 1L) ~> SurrogateKeyCustomers\nSalesPerson keyGenerate(output(id_sk_salesperson as long),\n\tstartAt: 1L) ~> SurrogateKeySalesPerson\nSurrogateKeyCustomers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['customers'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appcustomers\nSurrogateKeySalesPerson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['salesperson'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appsalesperson"
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Customers\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> SalesPerson\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Territory\nCustomers keyGenerate(output(id_sk_customer as long),\n\tstartAt: 1L) ~> SurrogateKeyCustomers\nSalesPerson keyGenerate(output(id_sk_salesperson as long),\n\tstartAt: 1L) ~> SurrogateKeySalesPerson\nTerritory keyGenerate(output(id_sk_territory as long),\n\tstartAt: 1L) ~> SurrogateKeyTerritory\nSurrogateKeyCustomers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['customers'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appcustomers\nSurrogateKeySalesPerson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['salesperson'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appsalesperson\nSurrogateKeyTerritory sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['territory'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appTerritory"
 		}
 	}
 }
