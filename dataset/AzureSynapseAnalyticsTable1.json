@@ -3,7 +3,10 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "demosynapsest-WorkspaceDefaultSqlServer",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"DBName": "demosynapsest-WorkspaceDefaultSqlServer"
+			}
 		},
 		"annotations": [],
 		"type": "AzureSqlDWTable",
