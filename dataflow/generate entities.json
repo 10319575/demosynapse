@@ -1,5 +1,5 @@
 {
-	"name": "load_dimensions",
+	"name": "generate entities",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
