@@ -1,5 +1,5 @@
 {
-	"name": "Pipeline 1",
+	"name": "03_load_tables",
 	"properties": {
 		"activities": [
 			{
@@ -139,18 +139,21 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Parquet1",
+						"referenceName": "adl_app_customers",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "AzureSynapseAnalyticsTable1",
+						"referenceName": "dim_customers",
 						"type": "DatasetReference"
 					}
 				]
 			}
 		],
+		"folder": {
+			"name": "AdventureWorks"
+		},
 		"annotations": []
 	}
 }
