@@ -25,14 +25,7 @@
 					},
 					"sink": {
 						"type": "SqlDWSink",
-						"writeBehavior": "Upsert",
-						"upsertSettings": {
-							"keys": [
-								"id_sk_customers"
-							],
-							"interimSchemaName": "dbo"
-						},
-						"sqlWriterUseTableLock": false,
+						"allowCopyCommand": true,
 						"tableOption": "autoCreate",
 						"disableMetricsCollection": false
 					},
@@ -43,93 +36,74 @@
 							{
 								"source": {
 									"name": "CustomerID",
-									"type": "String",
-									"physicalType": "UTF8"
+									"type": "String"
 								},
 								"sink": {
 									"name": "CustomerID",
-									"type": "String",
-									"physicalType": "String"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
 									"name": "PersonID",
-									"type": "String",
-									"physicalType": "UTF8"
+									"type": "String"
 								},
 								"sink": {
 									"name": "PersonID",
-									"type": "String",
-									"physicalType": "String"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
 									"name": "StoreID",
-									"type": "String",
-									"physicalType": "UTF8"
+									"type": "String"
 								},
 								"sink": {
 									"name": "StoreID",
-									"type": "String",
-									"physicalType": "String"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
 									"name": "TerritoryID",
-									"type": "String",
-									"physicalType": "UTF8"
+									"type": "String"
 								},
 								"sink": {
 									"name": "TerritoryID",
-									"type": "String",
-									"physicalType": "String"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
 									"name": "AccountNumber",
-									"type": "String",
-									"physicalType": "UTF8"
+									"type": "String"
 								},
 								"sink": {
 									"name": "AccountNumber",
-									"type": "String",
-									"physicalType": "String"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
 									"name": "ModifiedDate",
-									"type": "String",
-									"physicalType": "UTF8"
+									"type": "String"
 								},
 								"sink": {
 									"name": "ModifiedDate",
-									"type": "String",
-									"physicalType": "String"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
 									"name": "id_sk_customers",
-									"type": "Int64",
-									"physicalType": "INT64"
+									"type": "Int64"
 								},
 								"sink": {
 									"name": "id_sk_customers",
-									"type": "Int64",
-									"physicalType": "Int64"
+									"type": "Int64"
 								}
 							}
-						],
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
+						]
 					}
 				},
 				"inputs": [
