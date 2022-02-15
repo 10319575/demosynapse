@@ -10,13 +10,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "customers"
-				},
-				{
-					"dataset": {
-						"referenceName": "adl_raw_salesperson",
-						"type": "DatasetReference"
-					},
-					"name": "salesperson"
 				}
 			],
 			"sinks": [
@@ -26,24 +19,14 @@
 						"type": "DatasetReference"
 					},
 					"name": "appcustomers"
-				},
-				{
-					"dataset": {
-						"referenceName": "adl_app_salesperson",
-						"type": "DatasetReference"
-					},
-					"name": "appsalesperson"
 				}
 			],
 			"transformations": [
 				{
 					"name": "SurrogateKeycustomers"
-				},
-				{
-					"name": "SurrogateKeySalesPerson"
 				}
 			],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> customers\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> salesperson\ncustomers keyGenerate(output(id_sk_customers as long),\n\tstartAt: 1L) ~> SurrogateKeycustomers\nsalesperson keyGenerate(output(id_sk_salesperson as long),\n\tstartAt: 1L) ~> SurrogateKeySalesPerson\nSurrogateKeycustomers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['customers'],\n\ttruncate: true,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1,\n\tpartitionBy('hash', 1)) ~> appcustomers\nSurrogateKeySalesPerson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['salesperson'],\n\ttruncate: true,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appsalesperson"
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> customers\ncustomers keyGenerate(output(id_sk_customers as long),\n\tstartAt: 1L) ~> SurrogateKeycustomers\nSurrogateKeycustomers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['customers'],\n\ttruncate: true,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 0,\n\tpartitionBy('hash', 1)) ~> appcustomers"
 		}
 	}
 }
