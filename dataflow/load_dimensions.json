@@ -9,7 +9,7 @@
 						"referenceName": "adl_raw_customers",
 						"type": "DatasetReference"
 					},
-					"name": "customers"
+					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -18,15 +18,15 @@
 						"referenceName": "adl_app_customers",
 						"type": "DatasetReference"
 					},
-					"name": "appcustomers"
+					"name": "sink1"
 				}
 			],
 			"transformations": [
 				{
-					"name": "SurrogateKeycustomers"
+					"name": "SurrogateKey1"
 				}
 			],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> customers\ncustomers keyGenerate(output(id_sk_customers as long),\n\tstartAt: 1L) ~> SurrogateKeycustomers\nSurrogateKeycustomers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['customers'],\n\ttruncate: true,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 0,\n\tpartitionBy('hash', 1)) ~> appcustomers"
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 keyGenerate(output(id_sk_customer as long),\n\tstartAt: 1L) ~> SurrogateKey1\nSurrogateKey1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['customers'],\n\ttruncate: true,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
 		}
 	}
 }
