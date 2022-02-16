@@ -148,10 +148,13 @@
 						}
 					},
 					"sink": {
-						"type": "SqlDWSink",
-						"allowCopyCommand": true,
-						"tableOption": "autoCreate",
-						"disableMetricsCollection": false
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
 					},
 					"enableStaging": false,
 					"translator": {
@@ -232,13 +235,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "adl_app_shipmethod",
+						"referenceName": "adl_app_sales",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "dim_shipmethod",
+						"referenceName": "adl_app_sales",
 						"type": "DatasetReference"
 					}
 				]
