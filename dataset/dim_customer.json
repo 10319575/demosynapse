@@ -1,5 +1,5 @@
 {
-	"name": "dim_customers",
+	"name": "dim_customer",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "demosynapsest-WorkspaceDefaultSqlServer",
