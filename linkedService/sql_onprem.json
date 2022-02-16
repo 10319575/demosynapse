@@ -13,10 +13,6 @@
 				},
 				"secretName": "sqlserver-onpremise-password"
 			}
-		},
-		"connectVia": {
-			"referenceName": "irdemosynapse",
-			"type": "IntegrationRuntimeReference"
 		}
 	},
 	"type": "Microsoft.Synapse/workspaces/linkedservices"
