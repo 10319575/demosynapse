@@ -1,0 +1,39 @@
+{
+	"name": "Load_Sales",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "adl_raw_sales",
+						"type": "DatasetReference"
+					},
+					"name": "sales"
+				},
+				{
+					"dataset": {
+						"referenceName": "adl_app_customers",
+						"type": "DatasetReference"
+					},
+					"name": "customers"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Parquet1",
+						"type": "DatasetReference"
+					},
+					"name": "appsales"
+				}
+			],
+			"transformations": [
+				{
+					"name": "JoinCustomers"
+				}
+			],
+			"script": "source(output(\n\t\tSalesOrderID as integer,\n\t\tOrderDate as string,\n\t\tDueDate as string,\n\t\tShipDate as string,\n\t\tStatus as short,\n\t\tOnlineOrderFlag as boolean,\n\t\tCustomerID as string,\n\t\tSalesPersonID as short,\n\t\tTerritoryID as short,\n\t\tShipMethodID as short,\n\t\tProductID as short,\n\t\tOrderQty as short,\n\t\tUnitPrice as double,\n\t\tUnitPriceDiscount as double,\n\t\tLineTotal as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> sales\nsource(output(\n\t\tCustomerID as string,\n\t\tPersonID as string,\n\t\tStoreID as string,\n\t\tTerritoryID as string,\n\t\tAccountNumber as string,\n\t\tModifiedDate as string,\n\t\tid_sk_customer as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> customers\nsales, customers join(sales@CustomerID == customers@CustomerID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> JoinCustomers\nJoinCustomers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tCustomerID as string,\n\t\tPersonID as string,\n\t\tStoreID as string,\n\t\tTerritoryID as string,\n\t\tAccountNumber as string,\n\t\tModifiedDate as string,\n\t\tid_sk_customer as long\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['sales.parquet'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appsales"
+		}
+	}
+}
