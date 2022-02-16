@@ -2,7 +2,7 @@
 	"name": "dim_territory",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "demosynapsest-WorkspaceDefaultSqlServer",
+			"referenceName": "AzureSynapseAnalytics",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
