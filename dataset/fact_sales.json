@@ -1,0 +1,22 @@
+{
+	"name": "fact_sales",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "demosynapsest-WorkspaceDefaultSqlServer",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"DBName": "dedicateddemosynapse"
+			}
+		},
+		"folder": {
+			"name": "sales/dw"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "",
+			"table": "fact_sales"
+		}
+	}
+}
