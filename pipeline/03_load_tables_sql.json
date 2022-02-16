@@ -19,7 +19,7 @@
 						"type": "ParquetSource",
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
-							"fileListPath": "synapse/application/sales/customers.parquet",
+							"recursive": true,
 							"enablePartitionDiscovery": false
 						}
 					},
