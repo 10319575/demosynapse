@@ -4,7 +4,7 @@
 		"annotations": [],
 		"type": "AzureKeyVault",
 		"typeProperties": {
-			"baseUrl": "https://kvrjz.vault.azure.net/"
+			"baseUrl": "https://kvrjz2.vault.azure.net/"
 		}
 	}
 }
