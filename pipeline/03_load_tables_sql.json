@@ -148,13 +148,10 @@
 						}
 					},
 					"sink": {
-						"type": "ParquetSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "ParquetWriteSettings"
-						}
+						"type": "SqlDWSink",
+						"allowCopyCommand": true,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
 					},
 					"enableStaging": false,
 					"translator": {
@@ -227,7 +224,7 @@
 								},
 								"sink": {
 									"name": "UnitPrice",
-									"type": "Double"
+									"type": "Single"
 								}
 							},
 							{
@@ -237,7 +234,7 @@
 								},
 								"sink": {
 									"name": "UnitPriceDiscount",
-									"type": "Double"
+									"type": "Single"
 								}
 							},
 							{
@@ -247,7 +244,7 @@
 								},
 								"sink": {
 									"name": "LineTotal",
-									"type": "Double"
+									"type": "Single"
 								}
 							}
 						]
@@ -261,7 +258,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "adl_app_sales",
+						"referenceName": "fact_sales",
 						"type": "DatasetReference"
 					}
 				]
