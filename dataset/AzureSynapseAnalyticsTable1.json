@@ -9,7 +9,7 @@
 		"type": "AzureSqlDWTable",
 		"schema": [],
 		"typeProperties": {
-			"table": "fact_sales"
+			"table": "dim_shipmethod"
 		}
 	}
 }
