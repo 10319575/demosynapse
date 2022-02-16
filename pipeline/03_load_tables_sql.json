@@ -124,7 +124,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "dim_salesperson",
+						"activity": "dim_territory",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -677,6 +677,294 @@
 				"outputs": [
 					{
 						"referenceName": "dim_salesperson",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "dim_shipmethod",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "dim_salesperson",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "SqlDWSink",
+						"allowCopyCommand": true,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ShipMethodID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ShipMethodID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ShipBase",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ShipBase",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ShipRate",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ShipRate",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "rowguid",
+									"type": "String"
+								},
+								"sink": {
+									"name": "rowguid",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ModifiedDate",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ModifiedDate",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "id_sk_shipmethod",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "id_sk_shipmethod",
+									"type": "Int64"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "adl_app_shipmethod",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dim_shipmethod",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "dim_territory",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "dim_shipmethod",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "SqlDWSink",
+						"allowCopyCommand": true,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "TerritoryID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TerritoryID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CountryRegionCode",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CountryRegionCode",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Group",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Group",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SalesYTD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SalesYTD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SalesLastYear",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SalesLastYear",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CostYTD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CostYTD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CostLastYear",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CostLastYear",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "rowguid",
+									"type": "String"
+								},
+								"sink": {
+									"name": "rowguid",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ModifiedDate",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ModifiedDate",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "id_sk_territory",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "id_sk_territory",
+									"type": "Int64"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "adl_app_territory",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dim_territory",
 						"type": "DatasetReference"
 					}
 				]
