@@ -1,9 +1,12 @@
 {
-	"name": "AzureSynapseAnalyticsTable1",
+	"name": "dim_shipmethod",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "demosynapsest-WorkspaceDefaultSqlServer",
 			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "sales/dw"
 		},
 		"annotations": [],
 		"type": "AzureSqlDWTable",
