@@ -1,9 +1,12 @@
 {
-	"name": "Parquet1",
+	"name": "adl_app_sales",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "demosynapsest-WorkspaceDefaultStorage",
 			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "sales/adl"
 		},
 		"annotations": [],
 		"type": "Parquet",
