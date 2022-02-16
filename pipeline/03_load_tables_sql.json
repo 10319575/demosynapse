@@ -162,62 +162,32 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "ShipMethodID",
-									"type": "String"
+									"name": "id_sk_customer",
+									"type": "Int64"
 								},
 								"sink": {
-									"name": "ShipMethodID",
-									"type": "String"
+									"name": "id_sk_customer",
+									"type": "Int64"
 								}
 							},
 							{
 								"source": {
-									"name": "Name",
-									"type": "String"
+									"name": "id_sk_product",
+									"type": "Int64"
 								},
 								"sink": {
-									"name": "Name",
-									"type": "String"
+									"name": "id_sk_product",
+									"type": "Int64"
 								}
 							},
 							{
 								"source": {
-									"name": "ShipBase",
-									"type": "String"
+									"name": "id_sk_salesperson",
+									"type": "Int64"
 								},
 								"sink": {
-									"name": "ShipBase",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "ShipRate",
-									"type": "String"
-								},
-								"sink": {
-									"name": "ShipRate",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "rowguid",
-									"type": "String"
-								},
-								"sink": {
-									"name": "rowguid",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "ModifiedDate",
-									"type": "String"
-								},
-								"sink": {
-									"name": "ModifiedDate",
-									"type": "String"
+									"name": "id_sk_salesperson",
+									"type": "Int64"
 								}
 							},
 							{
@@ -228,6 +198,56 @@
 								"sink": {
 									"name": "id_sk_shipmethod",
 									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "id_sk_territory",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "id_sk_territory",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "OrderQty",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "OrderQty",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "UnitPrice",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "UnitPrice",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "UnitPriceDiscount",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "UnitPriceDiscount",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "LineTotal",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "LineTotal",
+									"type": "Double"
 								}
 							}
 						]
