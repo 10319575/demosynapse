@@ -3,13 +3,53 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Execute Pipeline1",
+				"name": "Extract",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "01_extract_sales",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Transforma_Move",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Extract",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_move_to_application",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Load DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Transforma_Move",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_load_tables_sql",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
