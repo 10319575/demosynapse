@@ -2,11 +2,8 @@
 	"name": "fact_sales",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "demosynapsest-WorkspaceDefaultSqlServer",
-			"type": "LinkedServiceReference",
-			"parameters": {
-				"DBName": "dedicateddemosynapse"
-			}
+			"referenceName": "AzureSynapseAnalytics",
+			"type": "LinkedServiceReference"
 		},
 		"folder": {
 			"name": "sales/dw"
