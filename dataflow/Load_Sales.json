@@ -50,7 +50,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Parquet1",
+						"referenceName": "adl_app_sales",
 						"type": "DatasetReference"
 					},
 					"name": "appsales"
