@@ -118,6 +118,123 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "fact_Sales",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "SqlDWSink",
+						"allowCopyCommand": true,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CustomerID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CustomerID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PersonID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PersonID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "StoreID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "StoreID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TerritoryID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TerritoryID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "AccountNumber",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AccountNumber",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ModifiedDate",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ModifiedDate",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "id_sk_customer",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "id_sk_customers",
+									"type": "Int64"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "adl_app_sales",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "fact_sales",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"folder": {
