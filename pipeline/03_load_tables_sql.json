@@ -95,7 +95,7 @@
 							},
 							{
 								"source": {
-									"name": "id_sk_customers",
+									"name": "id_sk_customer",
 									"type": "Int64"
 								},
 								"sink": {
