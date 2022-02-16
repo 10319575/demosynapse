@@ -114,7 +114,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "dim_customers",
+						"referenceName": "dim_customer",
 						"type": "DatasetReference"
 					}
 				]
@@ -122,7 +122,14 @@
 			{
 				"name": "fact_Sales",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "dim_salesperson",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -152,72 +159,92 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "CustomerID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "CustomerID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "PersonID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "PersonID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "StoreID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "StoreID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "TerritoryID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "TerritoryID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "AccountNumber",
-									"type": "String"
-								},
-								"sink": {
-									"name": "AccountNumber",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "ModifiedDate",
-									"type": "String"
-								},
-								"sink": {
-									"name": "ModifiedDate",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
 									"name": "id_sk_customer",
 									"type": "Int64"
 								},
 								"sink": {
-									"name": "id_sk_customers",
+									"name": "id_sk_customer",
 									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "id_sk_product",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "id_sk_product",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "id_sk_salesperson",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "id_sk_salesperson",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "id_sk_shipmethod",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "id_sk_shipmethod",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "id_sk_territory",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "id_sk_territory",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "OrderQty",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "OrderQty",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "UnitPrice",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "UnitPrice",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "UnitPriceDiscount",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "UnitPriceDiscount",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "LineTotal",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "LineTotal",
+									"type": "Double"
 								}
 							}
 						]
@@ -232,6 +259,424 @@
 				"outputs": [
 					{
 						"referenceName": "fact_sales",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "dim_product",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "dim_customers",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "SqlDWSink",
+						"allowCopyCommand": true,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ProductID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ProductID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductNumber",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ProductNumber",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MakeFlag",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MakeFlag",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FinishedGoodsFlag",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FinishedGoodsFlag",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Color",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Color",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SafetyStockLevel",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SafetyStockLevel",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ReorderPoint",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ReorderPoint",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "StandardCost",
+									"type": "String"
+								},
+								"sink": {
+									"name": "StandardCost",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ListPrice",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ListPrice",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Size",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Size",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SizeUnitMeasureCode",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SizeUnitMeasureCode",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "WeightUnitMeasureCode",
+									"type": "String"
+								},
+								"sink": {
+									"name": "WeightUnitMeasureCode",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Weight",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Weight",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DaysToManufacture",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DaysToManufacture",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductLine",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ProductLine",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Class",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Class",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Style",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Style",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductModelID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ProductModelID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SellStartDate",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SellStartDate",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SellEndDate",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SellEndDate",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DiscontinuedDate",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DiscontinuedDate",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductCategory",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ProductCategory",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductSubcategory",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ProductSubcategory",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "id_sk_product",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "id_sk_product",
+									"type": "Int64"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "adl_app_product",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dim_product",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "dim_salesperson",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "dim_product",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "SqlDWSink",
+						"allowCopyCommand": true,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "BusinessEntityID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BusinessEntityID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TerritoryID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TerritoryID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SalesQuota",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SalesQuota",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Bonus",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Bonus",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CommissionPct",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CommissionPct",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "id_sk_salesperson",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "id_sk_salesperson",
+									"type": "Int64"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "adl_app_salesperson",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dim_salesperson",
 						"type": "DatasetReference"
 					}
 				]
