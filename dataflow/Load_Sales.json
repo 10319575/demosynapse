@@ -17,6 +17,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "customers"
+				},
+				{
+					"dataset": {
+						"referenceName": "adl_app_product",
+						"type": "DatasetReference"
+					},
+					"name": "product"
 				}
 			],
 			"sinks": [
@@ -31,9 +38,15 @@
 			"transformations": [
 				{
 					"name": "JoinCustomers"
+				},
+				{
+					"name": "Aggregate"
+				},
+				{
+					"name": "JoinProduct"
 				}
 			],
-			"script": "source(output(\n\t\tSalesOrderID as integer,\n\t\tOrderDate as string,\n\t\tDueDate as string,\n\t\tShipDate as string,\n\t\tStatus as short,\n\t\tOnlineOrderFlag as boolean,\n\t\tCustomerID as string,\n\t\tSalesPersonID as short,\n\t\tTerritoryID as short,\n\t\tShipMethodID as short,\n\t\tProductID as short,\n\t\tOrderQty as short,\n\t\tUnitPrice as double,\n\t\tUnitPriceDiscount as double,\n\t\tLineTotal as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> sales\nsource(output(\n\t\tCustomerID as string,\n\t\tPersonID as string,\n\t\tStoreID as string,\n\t\tTerritoryID as string,\n\t\tAccountNumber as string,\n\t\tModifiedDate as string,\n\t\tid_sk_customer as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> customers\nsales, customers join(sales@CustomerID == customers@CustomerID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> JoinCustomers\nJoinCustomers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tCustomerID as string,\n\t\tPersonID as string,\n\t\tStoreID as string,\n\t\tTerritoryID as string,\n\t\tAccountNumber as string,\n\t\tModifiedDate as string,\n\t\tid_sk_customer as long\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['sales.parquet'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appsales"
+			"script": "source(output(\n\t\tSalesOrderID as integer,\n\t\tOrderDate as string,\n\t\tDueDate as string,\n\t\tShipDate as string,\n\t\tStatus as short,\n\t\tOnlineOrderFlag as boolean,\n\t\tCustomerID as string,\n\t\tSalesPersonID as short,\n\t\tTerritoryID as short,\n\t\tShipMethodID as short,\n\t\tProductID as short,\n\t\tOrderQty as short,\n\t\tUnitPrice as double,\n\t\tUnitPriceDiscount as double,\n\t\tLineTotal as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> sales\nsource(output(\n\t\tCustomerID as string,\n\t\tPersonID as string,\n\t\tStoreID as string,\n\t\tTerritoryID as string,\n\t\tAccountNumber as string,\n\t\tModifiedDate as string,\n\t\tid_sk_customer as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> customers\nsource(output(\n\t\tProductID as string,\n\t\tName as string,\n\t\tProductNumber as string,\n\t\tMakeFlag as string,\n\t\tFinishedGoodsFlag as string,\n\t\tColor as string,\n\t\tSafetyStockLevel as string,\n\t\tReorderPoint as string,\n\t\tStandardCost as string,\n\t\tListPrice as string,\n\t\tSize as string,\n\t\tSizeUnitMeasureCode as string,\n\t\tWeightUnitMeasureCode as string,\n\t\tWeight as string,\n\t\tDaysToManufacture as string,\n\t\tProductLine as string,\n\t\tClass as string,\n\t\tStyle as string,\n\t\tProductModelID as string,\n\t\tSellStartDate as string,\n\t\tSellEndDate as string,\n\t\tDiscontinuedDate as string,\n\t\tProductCategory as string,\n\t\tProductSubcategory as string,\n\t\tid_sk_product as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> product\nsales, customers join(sales@CustomerID == customers@CustomerID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> JoinCustomers\nJoinProduct aggregate(groupBy(id_sk_customer,\n\t\tid_sk_product),\n\tOrderQty = sum(OrderQty)) ~> Aggregate\nJoinCustomers, product join(sales@ProductID == product@ProductID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> JoinProduct\nAggregate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tCustomerID as string,\n\t\tPersonID as string,\n\t\tStoreID as string,\n\t\tTerritoryID as string,\n\t\tAccountNumber as string,\n\t\tModifiedDate as string,\n\t\tid_sk_customer as long\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['sales.parquet'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appsales"
 		}
 	}
 }
