@@ -724,61 +724,71 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "BusinessEntityID",
+									"name": "ShipMethodID",
 									"type": "String"
 								},
 								"sink": {
-									"name": "BusinessEntityID",
+									"name": "ShipMethodID",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "TerritoryID",
+									"name": "Name",
 									"type": "String"
 								},
 								"sink": {
-									"name": "TerritoryID",
+									"name": "Name",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "SalesQuota",
+									"name": "ShipBase",
 									"type": "String"
 								},
 								"sink": {
-									"name": "SalesQuota",
+									"name": "ShipBase",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "Bonus",
+									"name": "ShipRate",
 									"type": "String"
 								},
 								"sink": {
-									"name": "Bonus",
+									"name": "ShipRate",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "CommissionPct",
+									"name": "rowguid",
 									"type": "String"
 								},
 								"sink": {
-									"name": "CommissionPct",
+									"name": "rowguid",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "id_sk_salesperson",
+									"name": "ModifiedDate",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ModifiedDate",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "id_sk_shipmethod",
 									"type": "Int64"
 								},
 								"sink": {
-									"name": "id_sk_salesperson",
+									"name": "id_sk_shipmethod",
 									"type": "Int64"
 								}
 							}
@@ -787,13 +797,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "adl_app_salesperson",
+						"referenceName": "adl_app_shipmethod",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "dim_salesperson",
+						"referenceName": "dim_shipmethod",
 						"type": "DatasetReference"
 					}
 				]
