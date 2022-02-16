@@ -169,6 +169,16 @@
 							},
 							{
 								"source": {
+									"name": "OrderDate",
+									"type": "String"
+								},
+								"sink": {
+									"name": "OrderDate",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
 									"name": "id_sk_product",
 									"type": "Int64"
 								},
@@ -224,7 +234,7 @@
 								},
 								"sink": {
 									"name": "UnitPrice",
-									"type": "Single"
+									"type": "Double"
 								}
 							},
 							{
@@ -234,7 +244,7 @@
 								},
 								"sink": {
 									"name": "UnitPriceDiscount",
-									"type": "Single"
+									"type": "Double"
 								}
 							},
 							{
@@ -244,7 +254,7 @@
 								},
 								"sink": {
 									"name": "LineTotal",
-									"type": "Single"
+									"type": "Double"
 								}
 							}
 						]
