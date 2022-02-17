@@ -28,78 +28,7 @@
 						"allowCopyCommand": true,
 						"disableMetricsCollection": false
 					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "CustomerID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "CustomerID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "PersonID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "PersonID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "StoreID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "StoreID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "TerritoryID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "TerritoryID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "AccountNumber",
-									"type": "String"
-								},
-								"sink": {
-									"name": "AccountNumber",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "ModifiedDate",
-									"type": "String"
-								},
-								"sink": {
-									"name": "ModifiedDate",
-									"type": "String"
-								}
-							},
-							{
-								"sink": {
-									"name": "id_sk_customers",
-									"type": "Int64"
-								}
-							}
-						]
-					}
+					"enableStaging": false
 				},
 				"inputs": [
 					{
