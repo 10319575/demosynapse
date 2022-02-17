@@ -19,6 +19,47 @@
 			},
 			"compressionCodec": "snappy"
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "id_sk_customer",
+				"type": "INT64"
+			},
+			{
+				"name": "OrderDate",
+				"type": "UTF8"
+			},
+			{
+				"name": "id_sk_product",
+				"type": "INT64"
+			},
+			{
+				"name": "id_sk_salesperson",
+				"type": "INT64"
+			},
+			{
+				"name": "id_sk_shipmethod",
+				"type": "INT64"
+			},
+			{
+				"name": "id_sk_territory",
+				"type": "INT64"
+			},
+			{
+				"name": "OrderQty",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UnitPrice",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UnitPriceDiscount",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "LineTotal",
+				"type": "DOUBLE"
+			}
+		]
 	}
 }
