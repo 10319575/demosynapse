@@ -170,7 +170,7 @@
 							{
 								"source": {
 									"name": "OrderDate",
-									"type": "String"
+									"type": "DateTime"
 								},
 								"sink": {
 									"name": "OrderDate",
@@ -234,7 +234,7 @@
 								},
 								"sink": {
 									"name": "UnitPrice",
-									"type": "Double"
+									"type": "Single"
 								}
 							},
 							{
@@ -244,7 +244,7 @@
 								},
 								"sink": {
 									"name": "UnitPriceDiscount",
-									"type": "Double"
+									"type": "Single"
 								}
 							},
 							{
@@ -254,7 +254,7 @@
 								},
 								"sink": {
 									"name": "LineTotal",
-									"type": "Double"
+									"type": "Single"
 								}
 							}
 						]
