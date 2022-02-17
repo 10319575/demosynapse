@@ -22,6 +22,27 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "BusinessEntityID",
+				"type": "String"
+			},
+			{
+				"name": "TerritoryID",
+				"type": "String"
+			},
+			{
+				"name": "SalesQuota",
+				"type": "String"
+			},
+			{
+				"name": "Bonus",
+				"type": "String"
+			},
+			{
+				"name": "CommissionPct",
+				"type": "String"
+			}
+		]
 	}
 }
