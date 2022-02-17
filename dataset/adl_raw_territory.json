@@ -22,6 +22,47 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "TerritoryID",
+				"type": "String"
+			},
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "CountryRegionCode",
+				"type": "String"
+			},
+			{
+				"name": "Group",
+				"type": "String"
+			},
+			{
+				"name": "SalesYTD",
+				"type": "String"
+			},
+			{
+				"name": "SalesLastYear",
+				"type": "String"
+			},
+			{
+				"name": "CostYTD",
+				"type": "String"
+			},
+			{
+				"name": "CostLastYear",
+				"type": "String"
+			},
+			{
+				"name": "rowguid",
+				"type": "String"
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "String"
+			}
+		]
 	}
 }
