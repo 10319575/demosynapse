@@ -170,7 +170,7 @@
 							{
 								"source": {
 									"name": "OrderDate",
-									"type": "DateTime"
+									"type": "String"
 								},
 								"sink": {
 									"name": "OrderDate",
@@ -220,11 +220,11 @@
 							{
 								"source": {
 									"name": "OrderQty",
-									"type": "Int64"
+									"type": "Double"
 								},
 								"sink": {
 									"name": "OrderQty",
-									"type": "Int64"
+									"type": "Single"
 								}
 							},
 							{
