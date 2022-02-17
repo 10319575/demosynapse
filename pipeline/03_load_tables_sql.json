@@ -36,41 +36,37 @@
 							{
 								"source": {
 									"name": "CustomerID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
-									"name": "CustomerID",
-									"type": "String"
+									"name": "CustomerID"
 								}
 							},
 							{
 								"source": {
 									"name": "PersonID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
-									"name": "PersonID",
-									"type": "String"
+									"name": "PersonID"
 								}
 							},
 							{
 								"source": {
 									"name": "StoreID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
-									"name": "StoreID",
-									"type": "String"
+									"name": "StoreID"
 								}
 							},
 							{
 								"source": {
 									"name": "TerritoryID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
-									"name": "TerritoryID",
-									"type": "String"
+									"name": "TerritoryID"
 								}
 							},
 							{
@@ -79,18 +75,16 @@
 									"type": "String"
 								},
 								"sink": {
-									"name": "AccountNumber",
-									"type": "String"
+									"name": "AccountNumber"
 								}
 							},
 							{
 								"source": {
 									"name": "ModifiedDate",
-									"type": "String"
+									"type": "DateTime"
 								},
 								"sink": {
-									"name": "ModifiedDate",
-									"type": "String"
+									"name": "ModifiedDate"
 								}
 							},
 							{
@@ -99,8 +93,7 @@
 									"type": "Int64"
 								},
 								"sink": {
-									"name": "id_sk_customers",
-									"type": "Int64"
+									"name": "id_sk_customer"
 								}
 							}
 						]
@@ -224,7 +217,7 @@
 								},
 								"sink": {
 									"name": "OrderQty",
-									"type": "Single"
+									"type": "Double"
 								}
 							},
 							{
@@ -234,7 +227,7 @@
 								},
 								"sink": {
 									"name": "UnitPrice",
-									"type": "Single"
+									"type": "Double"
 								}
 							},
 							{
@@ -244,7 +237,7 @@
 								},
 								"sink": {
 									"name": "UnitPriceDiscount",
-									"type": "Single"
+									"type": "Double"
 								}
 							},
 							{
@@ -254,7 +247,7 @@
 								},
 								"sink": {
 									"name": "LineTotal",
-									"type": "Single"
+									"type": "Double"
 								}
 							}
 						]
@@ -314,11 +307,11 @@
 							{
 								"source": {
 									"name": "ProductID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "ProductID",
-									"type": "String"
+									"type": "Int32"
 								}
 							},
 							{
@@ -344,21 +337,21 @@
 							{
 								"source": {
 									"name": "MakeFlag",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "MakeFlag",
-									"type": "String"
+									"type": "Int32"
 								}
 							},
 							{
 								"source": {
 									"name": "FinishedGoodsFlag",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "FinishedGoodsFlag",
-									"type": "String"
+									"type": "Int32"
 								}
 							},
 							{
@@ -374,41 +367,41 @@
 							{
 								"source": {
 									"name": "SafetyStockLevel",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "SafetyStockLevel",
-									"type": "String"
+									"type": "Int32"
 								}
 							},
 							{
 								"source": {
 									"name": "ReorderPoint",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "ReorderPoint",
-									"type": "String"
+									"type": "Int32"
 								}
 							},
 							{
 								"source": {
 									"name": "StandardCost",
-									"type": "String"
+									"type": "Single"
 								},
 								"sink": {
 									"name": "StandardCost",
-									"type": "String"
+									"type": "Single"
 								}
 							},
 							{
 								"source": {
 									"name": "ListPrice",
-									"type": "String"
+									"type": "Single"
 								},
 								"sink": {
 									"name": "ListPrice",
-									"type": "String"
+									"type": "Single"
 								}
 							},
 							{
@@ -444,21 +437,21 @@
 							{
 								"source": {
 									"name": "Weight",
-									"type": "String"
+									"type": "Decimal"
 								},
 								"sink": {
 									"name": "Weight",
-									"type": "String"
+									"type": "Decimal"
 								}
 							},
 							{
 								"source": {
 									"name": "DaysToManufacture",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "DaysToManufacture",
-									"type": "String"
+									"type": "Int32"
 								}
 							},
 							{
@@ -494,41 +487,41 @@
 							{
 								"source": {
 									"name": "ProductModelID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "ProductModelID",
-									"type": "String"
+									"type": "Int32"
 								}
 							},
 							{
 								"source": {
 									"name": "SellStartDate",
-									"type": "String"
+									"type": "DateTime"
 								},
 								"sink": {
 									"name": "SellStartDate",
-									"type": "String"
+									"type": "DateTime"
 								}
 							},
 							{
 								"source": {
 									"name": "SellEndDate",
-									"type": "String"
+									"type": "DateTime"
 								},
 								"sink": {
 									"name": "SellEndDate",
-									"type": "String"
+									"type": "DateTime"
 								}
 							},
 							{
 								"source": {
 									"name": "DiscontinuedDate",
-									"type": "String"
+									"type": "DateTime"
 								},
 								"sink": {
 									"name": "DiscontinuedDate",
-									"type": "String"
+									"type": "DateTime"
 								}
 							},
 							{
@@ -618,51 +611,51 @@
 							{
 								"source": {
 									"name": "BusinessEntityID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "BusinessEntityID",
-									"type": "String"
+									"type": "Int32"
 								}
 							},
 							{
 								"source": {
 									"name": "TerritoryID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "TerritoryID",
-									"type": "String"
+									"type": "Int32"
 								}
 							},
 							{
 								"source": {
 									"name": "SalesQuota",
-									"type": "String"
+									"type": "Single"
 								},
 								"sink": {
 									"name": "SalesQuota",
-									"type": "String"
+									"type": "Single"
 								}
 							},
 							{
 								"source": {
 									"name": "Bonus",
-									"type": "String"
+									"type": "Single"
 								},
 								"sink": {
 									"name": "Bonus",
-									"type": "String"
+									"type": "Single"
 								}
 							},
 							{
 								"source": {
 									"name": "CommissionPct",
-									"type": "String"
+									"type": "Single"
 								},
 								"sink": {
 									"name": "CommissionPct",
-									"type": "String"
+									"type": "Single"
 								}
 							},
 							{
@@ -732,11 +725,11 @@
 							{
 								"source": {
 									"name": "ShipMethodID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "ShipMethodID",
-									"type": "String"
+									"type": "Int32"
 								}
 							},
 							{
@@ -752,21 +745,21 @@
 							{
 								"source": {
 									"name": "ShipBase",
-									"type": "String"
+									"type": "Single"
 								},
 								"sink": {
 									"name": "ShipBase",
-									"type": "String"
+									"type": "Single"
 								}
 							},
 							{
 								"source": {
 									"name": "ShipRate",
-									"type": "String"
+									"type": "Single"
 								},
 								"sink": {
 									"name": "ShipRate",
-									"type": "String"
+									"type": "Single"
 								}
 							},
 							{
@@ -782,11 +775,11 @@
 							{
 								"source": {
 									"name": "ModifiedDate",
-									"type": "String"
+									"type": "DateTime"
 								},
 								"sink": {
 									"name": "ModifiedDate",
-									"type": "String"
+									"type": "DateTime"
 								}
 							},
 							{
@@ -856,11 +849,11 @@
 							{
 								"source": {
 									"name": "TerritoryID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "TerritoryID",
-									"type": "String"
+									"type": "Int32"
 								}
 							},
 							{
@@ -896,21 +889,21 @@
 							{
 								"source": {
 									"name": "SalesYTD",
-									"type": "String"
+									"type": "Single"
 								},
 								"sink": {
 									"name": "SalesYTD",
-									"type": "String"
+									"type": "Single"
 								}
 							},
 							{
 								"source": {
 									"name": "SalesLastYear",
-									"type": "String"
+									"type": "Single"
 								},
 								"sink": {
 									"name": "SalesLastYear",
-									"type": "String"
+									"type": "Single"
 								}
 							},
 							{
@@ -926,11 +919,11 @@
 							{
 								"source": {
 									"name": "CostLastYear",
-									"type": "String"
+									"type": "Single"
 								},
 								"sink": {
 									"name": "CostLastYear",
-									"type": "String"
+									"type": "Single"
 								}
 							},
 							{
@@ -946,11 +939,11 @@
 							{
 								"source": {
 									"name": "ModifiedDate",
-									"type": "String"
+									"type": "DateTime"
 								},
 								"sink": {
 									"name": "ModifiedDate",
-									"type": "String"
+									"type": "DateTime"
 								}
 							},
 							{
