@@ -19,6 +19,109 @@
 			},
 			"compressionCodec": "snappy"
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "ProductID",
+				"type": "INT32"
+			},
+			{
+				"name": "Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "ProductNumber",
+				"type": "UTF8"
+			},
+			{
+				"name": "MakeFlag",
+				"type": "INT32"
+			},
+			{
+				"name": "FinishedGoodsFlag",
+				"type": "INT32"
+			},
+			{
+				"name": "Color",
+				"type": "UTF8"
+			},
+			{
+				"name": "SafetyStockLevel",
+				"type": "INT32"
+			},
+			{
+				"name": "ReorderPoint",
+				"type": "INT32"
+			},
+			{
+				"name": "StandardCost",
+				"type": "FLOAT"
+			},
+			{
+				"name": "ListPrice",
+				"type": "FLOAT"
+			},
+			{
+				"name": "Size",
+				"type": "UTF8"
+			},
+			{
+				"name": "SizeUnitMeasureCode",
+				"type": "UTF8"
+			},
+			{
+				"name": "WeightUnitMeasureCode",
+				"type": "UTF8"
+			},
+			{
+				"name": "Weight",
+				"type": "DECIMAL",
+				"precision": 10,
+				"scale": 0
+			},
+			{
+				"name": "DaysToManufacture",
+				"type": "INT32"
+			},
+			{
+				"name": "ProductLine",
+				"type": "UTF8"
+			},
+			{
+				"name": "Class",
+				"type": "UTF8"
+			},
+			{
+				"name": "Style",
+				"type": "UTF8"
+			},
+			{
+				"name": "ProductModelID",
+				"type": "INT32"
+			},
+			{
+				"name": "SellStartDate",
+				"type": "INT96"
+			},
+			{
+				"name": "SellEndDate",
+				"type": "INT96"
+			},
+			{
+				"name": "DiscontinuedDate",
+				"type": "INT96"
+			},
+			{
+				"name": "ProductCategory",
+				"type": "UTF8"
+			},
+			{
+				"name": "ProductSubcategory",
+				"type": "UTF8"
+			},
+			{
+				"name": "id_sk_product",
+				"type": "INT64"
+			}
+		]
 	}
 }
