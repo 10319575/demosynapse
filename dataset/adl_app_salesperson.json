@@ -19,6 +19,31 @@
 			},
 			"compressionCodec": "snappy"
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "BusinessEntityID",
+				"type": "INT32"
+			},
+			{
+				"name": "TerritoryID",
+				"type": "INT32"
+			},
+			{
+				"name": "SalesQuota",
+				"type": "FLOAT"
+			},
+			{
+				"name": "Bonus",
+				"type": "FLOAT"
+			},
+			{
+				"name": "CommissionPct",
+				"type": "FLOAT"
+			},
+			{
+				"name": "id_sk_salesperson",
+				"type": "INT64"
+			}
+		]
 	}
 }
