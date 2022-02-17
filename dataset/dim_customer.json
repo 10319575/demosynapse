@@ -10,7 +10,37 @@
 		},
 		"annotations": [],
 		"type": "AzureSqlDWTable",
-		"schema": [],
+		"schema": [
+			{
+				"name": "CustomerID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PersonID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "StoreID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TerritoryID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "AccountNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "nvarchar"
+			},
+			{
+				"name": "id_sk_customers",
+				"type": "bigint",
+				"precision": 19
+			}
+		],
 		"typeProperties": {
 			"schema": "",
 			"table": "dim_customer"
