@@ -19,6 +19,51 @@
 			},
 			"compressionCodec": "snappy"
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "TerritoryID",
+				"type": "INT32"
+			},
+			{
+				"name": "Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "CountryRegionCode",
+				"type": "UTF8"
+			},
+			{
+				"name": "Group",
+				"type": "UTF8"
+			},
+			{
+				"name": "SalesYTD",
+				"type": "FLOAT"
+			},
+			{
+				"name": "SalesLastYear",
+				"type": "FLOAT"
+			},
+			{
+				"name": "CostYTD",
+				"type": "UTF8"
+			},
+			{
+				"name": "CostLastYear",
+				"type": "FLOAT"
+			},
+			{
+				"name": "rowguid",
+				"type": "UTF8"
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "INT96"
+			},
+			{
+				"name": "id_sk_territory",
+				"type": "INT64"
+			}
+		]
 	}
 }
