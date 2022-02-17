@@ -29,7 +29,82 @@
 						"tableOption": "autoCreate",
 						"disableMetricsCollection": false
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CustomerID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CustomerID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "PersonID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "PersonID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "StoreID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "StoreID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "TerritoryID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "TerritoryID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "AccountNumber",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AccountNumber",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ModifiedDate",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "ModifiedDate",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "id_sk_customer",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "id_sk_customer",
+									"type": "Int64"
+								}
+							}
+						]
+					}
 				},
 				"inputs": [
 					{
