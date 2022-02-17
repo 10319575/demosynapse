@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "customers.parquet",
+				"fileName": "customer.parquet",
 				"folderPath": "application/sales",
 				"fileSystem": "synapse"
 			},
