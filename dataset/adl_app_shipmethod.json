@@ -19,6 +19,35 @@
 			},
 			"compressionCodec": "snappy"
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "ShipMethodID",
+				"type": "INT32"
+			},
+			{
+				"name": "Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "ShipBase",
+				"type": "FLOAT"
+			},
+			{
+				"name": "ShipRate",
+				"type": "FLOAT"
+			},
+			{
+				"name": "rowguid",
+				"type": "UTF8"
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "INT96"
+			},
+			{
+				"name": "id_sk_shipmethod",
+				"type": "INT64"
+			}
+		]
 	}
 }
