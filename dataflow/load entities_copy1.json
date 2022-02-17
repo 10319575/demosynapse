@@ -1,0 +1,49 @@
+{
+	"name": "load entities_copy1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "adl_raw_customers",
+						"type": "DatasetReference"
+					},
+					"name": "Customers"
+				},
+				{
+					"dataset": {
+						"referenceName": "adl_raw_product",
+						"type": "DatasetReference"
+					},
+					"name": "Product"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "adl_app_customers",
+						"type": "DatasetReference"
+					},
+					"name": "appcustomers"
+				},
+				{
+					"dataset": {
+						"referenceName": "adl_app_product",
+						"type": "DatasetReference"
+					},
+					"name": "appProduct"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SurrogateKeyCustomers"
+				},
+				{
+					"name": "SurrogateKeyProduct"
+				}
+			],
+			"script": "source(output(\n\t\tCustomerID as integer,\n\t\tPersonID as integer,\n\t\tStoreID as integer,\n\t\tTerritoryID as integer,\n\t\tAccountNumber as string,\n\t\tModifiedDate as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Customers\nsource(output(\n\t\tProductID as integer,\n\t\tName as string,\n\t\tProductNumber as string,\n\t\tMakeFlag as string,\n\t\tFinishedGoodsFlag as string,\n\t\tColor as string,\n\t\tSafetyStockLevel as integer,\n\t\tReorderPoint as string,\n\t\tStandardCost as integer,\n\t\tListPrice as float,\n\t\tSize as string,\n\t\tSizeUnitMeasureCode as string,\n\t\tWeightUnitMeasureCode as string,\n\t\tWeight as decimal(10,0),\n\t\tDaysToManufacture as integer,\n\t\tProductLine as string,\n\t\tClass as string,\n\t\tStyle as string,\n\t\tProductModelID as integer,\n\t\tSellStartDate as string,\n\t\tSellEndDate as string,\n\t\tDiscontinuedDate as string,\n\t\tProductCategory as string,\n\t\tProductSubcategory as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Product\nCustomers keyGenerate(output(id_sk_customer as long),\n\tstartAt: 1L) ~> SurrogateKeyCustomers\nProduct keyGenerate(output(id_sk_product as long),\n\tstartAt: 1L) ~> SurrogateKeyProduct\nSurrogateKeyCustomers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tCustomerID as string,\n\t\tPersonID as string,\n\t\tStoreID as string,\n\t\tTerritoryID as string,\n\t\tAccountNumber as string,\n\t\tModifiedDate as string,\n\t\tid_sk_customer as long\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['customers.parquet'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appcustomers\nSurrogateKeyProduct sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['products.parquet'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appProduct"
+		}
+	}
+}
