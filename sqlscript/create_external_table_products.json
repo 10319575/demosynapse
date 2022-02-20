@@ -1,0 +1,17 @@
+{
+	"name": "create_external_table_products",
+	"properties": {
+		"content": {
+			"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'synapse_adldemost_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [synapse_adldemost_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION = 'abfss://synapse@adldemost.dfs.core.windows.net' \n\t)\nGO\n\nCREATE EXTERNAL TABLE products (\n\t[ProductID] int,\n\t[Name] nvarchar(4000),\n\t[ProductNumber] nvarchar(4000),\n\t[MakeFlag] int,\n\t[FinishedGoodsFlag] int,\n\t[Color] nvarchar(4000),\n\t[SafetyStockLevel] int,\n\t[ReorderPoint] int,\n\t[StandardCost] real,\n\t[ListPrice] real,\n\t[Size] nvarchar(4000),\n\t[SizeUnitMeasureCode] nvarchar(4000),\n\t[WeightUnitMeasureCode] nvarchar(4000),\n\t[Weight] numeric(10,0),\n\t[DaysToManufacture] int,\n\t[ProductLine] nvarchar(4000),\n\t[Class] nvarchar(4000),\n\t[Style] nvarchar(4000),\n\t[ProductModelID] int,\n\t[SellStartDate] datetime2(7),\n\t[SellEndDate] datetime2(7),\n\t[DiscontinuedDate] datetime2(7),\n\t[ProductCategory] nvarchar(4000),\n\t[ProductSubcategory] nvarchar(4000),\n\t[id_sk_product] bigint\n\t)\n\tWITH (\n\tLOCATION = 'application/sales/products.parquet',\n\tDATA_SOURCE = [synapse_adldemost_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\n\nSELECT TOP 100 * FROM dbo.products\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "Built-in",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
