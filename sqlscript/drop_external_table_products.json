@@ -1,0 +1,17 @@
+{
+	"name": "drop_external_table_products",
+	"properties": {
+		"content": {
+			"query": "DROP EXTERNAL FILE FORMAT [SynapseParquetFormat] \nGO\n\nDROP EXTERNAL DATA SOURCE [synapse_adldemost_dfs_core_windows_net] \nGO\n\nDROP EXTERNAL TABLE products\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "sample",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
