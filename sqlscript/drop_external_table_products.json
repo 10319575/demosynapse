@@ -2,7 +2,7 @@
 	"name": "drop_external_table_products",
 	"properties": {
 		"content": {
-			"query": "DROP EXTERNAL FILE FORMAT [SynapseParquetFormat] \nGO\n\nDROP EXTERNAL DATA SOURCE [synapse_adldemost_dfs_core_windows_net] \nGO\n\nDROP EXTERNAL TABLE products\nGO",
+			"query": "DROP EXTERNAL TABLE products\nGO\n\nDROP EXTERNAL DATA SOURCE [synapse_adldemost_dfs_core_windows_net] \nGO\n\nDROP EXTERNAL FILE FORMAT [SynapseParquetFormat] \nGO\n\n\n",
 			"metadata": {
 				"language": "sql"
 			},
