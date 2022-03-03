@@ -14,7 +14,7 @@
 			"Provider": "ADLS",
 			"Location": "abfss://synapse@adldemost.dfs.core.windows.net/Database1",
 			"Properties": {
-				"FormatType": "csv",
+				"FormatType": "parquet",
 				"LinkedServiceName": "demosynapsest-WorkspaceDefaultStorage"
 			}
 		}
