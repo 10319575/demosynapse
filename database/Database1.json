@@ -1,0 +1,23 @@
+{
+	"name": "Database1",
+	"properties": {
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"Properties": {
+			"IsSyMSCDMDatabase": true,
+			"DerivedModelDBInfo": "{\"ModelDirectives\":{\"BaseModel\":{\"Name\":\"Automotive\",\"Version\":\"0.1.0\"}}}"
+		},
+		"Name": "Database1",
+		"EntityType": "DATABASE",
+		"Source": {
+			"Provider": "ADLS",
+			"Location": "abfss://synapse@adldemost.dfs.core.windows.net/Database1",
+			"Properties": {
+				"FormatType": "csv",
+				"LinkedServiceName": "demosynapsest-WorkspaceDefaultStorage"
+			}
+		}
+	},
+	"type": "DATABASE"
+}
