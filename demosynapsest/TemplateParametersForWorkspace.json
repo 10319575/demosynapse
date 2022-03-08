@@ -5,20 +5,20 @@
 		"workspaceName": {
 			"value": "demosynapsest"
 		},
+		"AzureSynapseAnalytics_connectionString": {
+			"value": ""
+		},
 		"demosynapsest-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
 		"sql_onprem_connectionString": {
 			"value": ""
 		},
-		"city_safety_chicago_sasUri": {
-			"value": ""
-		},
 		"demosynapsest-WorkspaceDefaultStorage_properties_typeProperties_url": {
-			"value": "https://adlrjzs.dfs.core.windows.net"
+			"value": "https://adldemost.dfs.core.windows.net"
 		},
 		"kvrjz_properties_typeProperties_baseUrl": {
-			"value": "https://kvrjz.vault.azure.net/"
+			"value": "https://kvrjz2.vault.azure.net/"
 		}
 	}
 }

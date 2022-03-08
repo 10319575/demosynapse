@@ -7,6 +7,10 @@
 			"metadata": "Workspace name",
 			"defaultValue": "demosynapsest"
 		},
+		"AzureSynapseAnalytics_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics'"
+		},
 		"demosynapsest-WorkspaceDefaultSqlServer_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'demosynapsest-WorkspaceDefaultSqlServer'"
@@ -15,23 +19,97 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'sql_onprem'"
 		},
-		"city_safety_chicago_sasUri": {
-			"type": "secureString",
-			"metadata": "Secure string for 'sasUri' of 'city_safety_chicago'"
-		},
 		"demosynapsest-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://adlrjzs.dfs.core.windows.net"
+			"defaultValue": "https://adldemost.dfs.core.windows.net"
 		},
 		"kvrjz_properties_typeProperties_baseUrl": {
 			"type": "string",
-			"defaultValue": "https://kvrjz.vault.azure.net/"
+			"defaultValue": "https://kvrjz2.vault.azure.net/"
 		}
 	},
 	"variables": {
 		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/00_main')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Extract",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "01_extract_sales",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Transforma_Move",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Extract",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "02_move_to_application",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Load DW",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Transforma_Move",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "03_load_tables_sql",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "AdventureWorks"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/01_extract_sales')]",
+				"[concat(variables('workspaceId'), '/pipelines/02_move_to_application')]",
+				"[concat(variables('workspaceId'), '/pipelines/03_load_tables_sql')]"
+			]
+		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/01_extract_sales')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
@@ -1252,7 +1330,57 @@
 								"parameters": {},
 								"datasetParameters": {
 									"Customers": {},
-									"appcustomers": {}
+									"SalesPerson": {},
+									"Territory": {},
+									"ShipMethod": {},
+									"Product": {},
+									"appcustomers": {},
+									"appsalesperson": {},
+									"appTerritory": {},
+									"appShipmethod": {},
+									"appProduct": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Load Sales",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Load Entities",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Load_Sales",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sales": {},
+									"customers": {},
+									"product": {},
+									"salesPerson": {},
+									"shipmethod": {},
+									"territory": {},
+									"appsales": {}
 								}
 							},
 							"staging": {},
@@ -1268,11 +1396,14 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"folder": {
+					"name": "AdventureWorks"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/load entities')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/dataflows/Load_Sales')]"
 			]
 		},
 		{
@@ -1316,41 +1447,37 @@
 									{
 										"source": {
 											"name": "CustomerID",
-											"type": "String"
+											"type": "Int32"
 										},
 										"sink": {
-											"name": "CustomerID",
-											"type": "String"
+											"name": "CustomerID"
 										}
 									},
 									{
 										"source": {
 											"name": "PersonID",
-											"type": "String"
+											"type": "Int32"
 										},
 										"sink": {
-											"name": "PersonID",
-											"type": "String"
+											"name": "PersonID"
 										}
 									},
 									{
 										"source": {
 											"name": "StoreID",
-											"type": "String"
+											"type": "Int32"
 										},
 										"sink": {
-											"name": "StoreID",
-											"type": "String"
+											"name": "StoreID"
 										}
 									},
 									{
 										"source": {
 											"name": "TerritoryID",
-											"type": "String"
+											"type": "Int32"
 										},
 										"sink": {
-											"name": "TerritoryID",
-											"type": "String"
+											"name": "TerritoryID"
 										}
 									},
 									{
@@ -1359,28 +1486,25 @@
 											"type": "String"
 										},
 										"sink": {
-											"name": "AccountNumber",
-											"type": "String"
+											"name": "AccountNumber"
 										}
 									},
 									{
 										"source": {
 											"name": "ModifiedDate",
-											"type": "String"
+											"type": "DateTime"
 										},
 										"sink": {
-											"name": "ModifiedDate",
-											"type": "String"
+											"name": "ModifiedDate"
 										}
 									},
 									{
 										"source": {
-											"name": "id_sk_customers",
+											"name": "id_sk_customer",
 											"type": "Int64"
 										},
 										"sink": {
-											"name": "id_sk_customers",
-											"type": "Int64"
+											"name": "id_sk_customer"
 										}
 									}
 								]
@@ -1395,7 +1519,882 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "dim_customers",
+								"referenceName": "dim_customer",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "fact_Sales",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "dim_territory",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "SqlDWSink",
+								"allowCopyCommand": true,
+								"copyCommandSettings": {},
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "id_sk_customer",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "id_sk_customer",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "OrderDate",
+											"type": "String"
+										},
+										"sink": {
+											"name": "OrderDate",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "id_sk_product",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "id_sk_product",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "id_sk_salesperson",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "id_sk_salesperson",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "id_sk_shipmethod",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "id_sk_shipmethod",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "id_sk_territory",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "id_sk_territory",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "OrderQty",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "OrderQty",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "UnitPrice",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "UnitPrice",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "UnitPriceDiscount",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "UnitPriceDiscount",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "LineTotal",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "LineTotal",
+											"type": "Double"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "adl_app_sales",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "fact_sales",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "dim_product",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "dim_customers",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "SqlDWSink",
+								"allowCopyCommand": true,
+								"copyCommandSettings": {},
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ProductID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ProductID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductNumber",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ProductNumber",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MakeFlag",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "MakeFlag",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "FinishedGoodsFlag",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "FinishedGoodsFlag",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Color",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Color",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "SafetyStockLevel",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "SafetyStockLevel",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "ReorderPoint",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ReorderPoint",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "StandardCost",
+											"type": "Single"
+										},
+										"sink": {
+											"name": "StandardCost",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "ListPrice",
+											"type": "Single"
+										},
+										"sink": {
+											"name": "ListPrice",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "Size",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Size",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "SizeUnitMeasureCode",
+											"type": "String"
+										},
+										"sink": {
+											"name": "SizeUnitMeasureCode",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "WeightUnitMeasureCode",
+											"type": "String"
+										},
+										"sink": {
+											"name": "WeightUnitMeasureCode",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Weight",
+											"type": "Decimal"
+										},
+										"sink": {
+											"name": "Weight",
+											"type": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"name": "DaysToManufacture",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "DaysToManufacture",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductLine",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ProductLine",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Class",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Class",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Style",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Style",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductModelID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ProductModelID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "SellStartDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "SellStartDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "SellEndDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "SellEndDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "DiscontinuedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "DiscontinuedDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductCategory",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ProductCategory",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductSubcategory",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ProductSubcategory",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "id_sk_product",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "id_sk_product",
+											"type": "Int64"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "adl_app_product",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dim_product",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "dim_salesperson",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "dim_product",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "SqlDWSink",
+								"allowCopyCommand": true,
+								"copyCommandSettings": {},
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "BusinessEntityID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "BusinessEntityID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "TerritoryID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "TerritoryID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "SalesQuota",
+											"type": "Single"
+										},
+										"sink": {
+											"name": "SalesQuota",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "Bonus",
+											"type": "Single"
+										},
+										"sink": {
+											"name": "Bonus",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "CommissionPct",
+											"type": "Single"
+										},
+										"sink": {
+											"name": "CommissionPct",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "id_sk_salesperson",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "id_sk_salesperson",
+											"type": "Int64"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "adl_app_salesperson",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dim_salesperson",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "dim_shipmethod",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "dim_salesperson",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "SqlDWSink",
+								"allowCopyCommand": true,
+								"copyCommandSettings": {},
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ShipMethodID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ShipMethodID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ShipBase",
+											"type": "Single"
+										},
+										"sink": {
+											"name": "ShipBase",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "ShipRate",
+											"type": "Single"
+										},
+										"sink": {
+											"name": "ShipRate",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "rowguid",
+											"type": "String"
+										},
+										"sink": {
+											"name": "rowguid",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "id_sk_shipmethod",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "id_sk_shipmethod",
+											"type": "Int64"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "adl_app_shipmethod",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dim_shipmethod",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "dim_territory",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "dim_shipmethod",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "SqlDWSink",
+								"allowCopyCommand": true,
+								"copyCommandSettings": {},
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "TerritoryID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "TerritoryID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CountryRegionCode",
+											"type": "String"
+										},
+										"sink": {
+											"name": "CountryRegionCode",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Group",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Group",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "SalesYTD",
+											"type": "Single"
+										},
+										"sink": {
+											"name": "SalesYTD",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "SalesLastYear",
+											"type": "Single"
+										},
+										"sink": {
+											"name": "SalesLastYear",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "CostYTD",
+											"type": "String"
+										},
+										"sink": {
+											"name": "CostYTD",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CostLastYear",
+											"type": "Single"
+										},
+										"sink": {
+											"name": "CostLastYear",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "rowguid",
+											"type": "String"
+										},
+										"sink": {
+											"name": "rowguid",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "id_sk_territory",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "id_sk_territory",
+											"type": "Int64"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "adl_app_territory",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dim_territory",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -1413,89 +2412,17 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/datasets/adl_app_customers')]",
-				"[concat(variables('workspaceId'), '/datasets/dim_customers')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/DelimitedText1')]",
-			"type": "Microsoft.Synapse/workspaces/datasets",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "demosynapsest-WorkspaceDefaultStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "raw/sales",
-						"fileSystem": "synapse"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Parquet1')]",
-			"type": "Microsoft.Synapse/workspaces/datasets",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "demosynapsest-WorkspaceDefaultStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "customers",
-						"folderPath": "application/sales",
-						"fileSystem": "synapse"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": [
-					{
-						"name": "CustomerID",
-						"type": "UTF8"
-					},
-					{
-						"name": "PersonID",
-						"type": "UTF8"
-					},
-					{
-						"name": "StoreID",
-						"type": "UTF8"
-					},
-					{
-						"name": "TerritoryID",
-						"type": "UTF8"
-					},
-					{
-						"name": "AccountNumber",
-						"type": "UTF8"
-					},
-					{
-						"name": "ModifiedDate",
-						"type": "UTF8"
-					},
-					{
-						"name": "id_sk_customers",
-						"type": "INT64"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
+				"[concat(variables('workspaceId'), '/datasets/dim_customer')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_sales')]",
+				"[concat(variables('workspaceId'), '/datasets/fact_sales')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_product')]",
+				"[concat(variables('workspaceId'), '/datasets/dim_product')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_salesperson')]",
+				"[concat(variables('workspaceId'), '/datasets/dim_salesperson')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_shipmethod')]",
+				"[concat(variables('workspaceId'), '/datasets/dim_shipmethod')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_territory')]",
+				"[concat(variables('workspaceId'), '/datasets/dim_territory')]"
 			]
 		},
 		{
@@ -1515,13 +2442,244 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "customers",
+						"fileName": "customers.parquet",
 						"folderPath": "application/sales",
 						"fileSystem": "synapse"
 					},
 					"compressionCodec": "snappy"
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "CustomerID",
+						"type": "INT32"
+					},
+					{
+						"name": "PersonID",
+						"type": "INT32"
+					},
+					{
+						"name": "StoreID",
+						"type": "INT32"
+					},
+					{
+						"name": "TerritoryID",
+						"type": "INT32"
+					},
+					{
+						"name": "AccountNumber",
+						"type": "UTF8"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "INT96"
+					},
+					{
+						"name": "id_sk_customer",
+						"type": "INT64"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/adl_app_product')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "demosynapsest-WorkspaceDefaultStorage",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "sales/adl"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "products.parquet",
+						"folderPath": "application/sales",
+						"fileSystem": "synapse"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "ProductID",
+						"type": "INT32"
+					},
+					{
+						"name": "Name",
+						"type": "UTF8"
+					},
+					{
+						"name": "ProductNumber",
+						"type": "UTF8"
+					},
+					{
+						"name": "MakeFlag",
+						"type": "INT32"
+					},
+					{
+						"name": "FinishedGoodsFlag",
+						"type": "INT32"
+					},
+					{
+						"name": "Color",
+						"type": "UTF8"
+					},
+					{
+						"name": "SafetyStockLevel",
+						"type": "INT32"
+					},
+					{
+						"name": "ReorderPoint",
+						"type": "INT32"
+					},
+					{
+						"name": "StandardCost",
+						"type": "FLOAT"
+					},
+					{
+						"name": "ListPrice",
+						"type": "FLOAT"
+					},
+					{
+						"name": "Size",
+						"type": "UTF8"
+					},
+					{
+						"name": "SizeUnitMeasureCode",
+						"type": "UTF8"
+					},
+					{
+						"name": "WeightUnitMeasureCode",
+						"type": "UTF8"
+					},
+					{
+						"name": "Weight",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 0
+					},
+					{
+						"name": "DaysToManufacture",
+						"type": "INT32"
+					},
+					{
+						"name": "ProductLine",
+						"type": "UTF8"
+					},
+					{
+						"name": "Class",
+						"type": "UTF8"
+					},
+					{
+						"name": "Style",
+						"type": "UTF8"
+					},
+					{
+						"name": "ProductModelID",
+						"type": "INT32"
+					},
+					{
+						"name": "SellStartDate",
+						"type": "INT96"
+					},
+					{
+						"name": "SellEndDate",
+						"type": "INT96"
+					},
+					{
+						"name": "DiscontinuedDate",
+						"type": "INT96"
+					},
+					{
+						"name": "ProductCategory",
+						"type": "UTF8"
+					},
+					{
+						"name": "ProductSubcategory",
+						"type": "UTF8"
+					},
+					{
+						"name": "id_sk_product",
+						"type": "INT64"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/adl_app_sales')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "demosynapsest-WorkspaceDefaultStorage",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "sales/adl"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "sales.parquet",
+						"folderPath": "application/sales",
+						"fileSystem": "synapse"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "id_sk_customer",
+						"type": "INT64"
+					},
+					{
+						"name": "OrderDate",
+						"type": "UTF8"
+					},
+					{
+						"name": "id_sk_product",
+						"type": "INT64"
+					},
+					{
+						"name": "id_sk_salesperson",
+						"type": "INT64"
+					},
+					{
+						"name": "id_sk_shipmethod",
+						"type": "INT64"
+					},
+					{
+						"name": "id_sk_territory",
+						"type": "INT64"
+					},
+					{
+						"name": "OrderQty",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UnitPrice",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UnitPriceDiscount",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LineTotal",
+						"type": "DOUBLE"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
@@ -1544,13 +2702,170 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "salesperson",
+						"fileName": "salesperson.parquet",
 						"folderPath": "application/sales",
 						"fileSystem": "synapse"
 					},
 					"compressionCodec": "snappy"
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "BusinessEntityID",
+						"type": "INT32"
+					},
+					{
+						"name": "TerritoryID",
+						"type": "INT32"
+					},
+					{
+						"name": "SalesQuota",
+						"type": "FLOAT"
+					},
+					{
+						"name": "Bonus",
+						"type": "FLOAT"
+					},
+					{
+						"name": "CommissionPct",
+						"type": "FLOAT"
+					},
+					{
+						"name": "id_sk_salesperson",
+						"type": "INT64"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/adl_app_shipmethod')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "demosynapsest-WorkspaceDefaultStorage",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "sales/adl"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "shipmethod.parquet",
+						"folderPath": "application/sales",
+						"fileSystem": "synapse"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "ShipMethodID",
+						"type": "INT32"
+					},
+					{
+						"name": "Name",
+						"type": "UTF8"
+					},
+					{
+						"name": "ShipBase",
+						"type": "FLOAT"
+					},
+					{
+						"name": "ShipRate",
+						"type": "FLOAT"
+					},
+					{
+						"name": "rowguid",
+						"type": "UTF8"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "INT96"
+					},
+					{
+						"name": "id_sk_shipmethod",
+						"type": "INT64"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/adl_app_territory')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "demosynapsest-WorkspaceDefaultStorage",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "sales/adl"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "territory.parquet",
+						"folderPath": "application/sales",
+						"fileSystem": "synapse"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "TerritoryID",
+						"type": "INT32"
+					},
+					{
+						"name": "Name",
+						"type": "UTF8"
+					},
+					{
+						"name": "CountryRegionCode",
+						"type": "UTF8"
+					},
+					{
+						"name": "Group",
+						"type": "UTF8"
+					},
+					{
+						"name": "SalesYTD",
+						"type": "FLOAT"
+					},
+					{
+						"name": "SalesLastYear",
+						"type": "FLOAT"
+					},
+					{
+						"name": "CostYTD",
+						"type": "UTF8"
+					},
+					{
+						"name": "CostLastYear",
+						"type": "FLOAT"
+					},
+					{
+						"name": "rowguid",
+						"type": "UTF8"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "INT96"
+					},
+					{
+						"name": "id_sk_territory",
+						"type": "INT64"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
@@ -1573,7 +2888,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "customers",
+						"fileName": "customer",
 						"folderPath": "raw/sales",
 						"fileSystem": "synapse"
 					},
@@ -1582,7 +2897,32 @@
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "CustomerID",
+						"type": "String"
+					},
+					{
+						"name": "PersonID",
+						"type": "String"
+					},
+					{
+						"name": "StoreID",
+						"type": "String"
+					},
+					{
+						"name": "TerritoryID",
+						"type": "String"
+					},
+					{
+						"name": "AccountNumber",
+						"type": "String"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
@@ -1614,7 +2954,104 @@
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "ProductID",
+						"type": "String"
+					},
+					{
+						"name": "Name",
+						"type": "String"
+					},
+					{
+						"name": "ProductNumber",
+						"type": "String"
+					},
+					{
+						"name": "MakeFlag",
+						"type": "String"
+					},
+					{
+						"name": "FinishedGoodsFlag",
+						"type": "String"
+					},
+					{
+						"name": "Color",
+						"type": "String"
+					},
+					{
+						"name": "SafetyStockLevel",
+						"type": "String"
+					},
+					{
+						"name": "ReorderPoint",
+						"type": "String"
+					},
+					{
+						"name": "StandardCost",
+						"type": "String"
+					},
+					{
+						"name": "ListPrice",
+						"type": "String"
+					},
+					{
+						"name": "Size",
+						"type": "String"
+					},
+					{
+						"name": "SizeUnitMeasureCode",
+						"type": "String"
+					},
+					{
+						"name": "WeightUnitMeasureCode",
+						"type": "String"
+					},
+					{
+						"name": "Weight",
+						"type": "String"
+					},
+					{
+						"name": "DaysToManufacture",
+						"type": "String"
+					},
+					{
+						"name": "ProductLine",
+						"type": "String"
+					},
+					{
+						"name": "Class",
+						"type": "String"
+					},
+					{
+						"name": "Style",
+						"type": "String"
+					},
+					{
+						"name": "ProductModelID",
+						"type": "String"
+					},
+					{
+						"name": "SellStartDate",
+						"type": "String"
+					},
+					{
+						"name": "SellEndDate",
+						"type": "String"
+					},
+					{
+						"name": "DiscontinuedDate",
+						"type": "String"
+					},
+					{
+						"name": "ProductCategory",
+						"type": "String"
+					},
+					{
+						"name": "ProductSubcategory",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
@@ -1646,7 +3083,68 @@
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "SalesOrderID",
+						"type": "String"
+					},
+					{
+						"name": "OrderDate",
+						"type": "String"
+					},
+					{
+						"name": "DueDate",
+						"type": "String"
+					},
+					{
+						"name": "ShipDate",
+						"type": "String"
+					},
+					{
+						"name": "Status",
+						"type": "String"
+					},
+					{
+						"name": "OnlineOrderFlag",
+						"type": "String"
+					},
+					{
+						"name": "CustomerID",
+						"type": "String"
+					},
+					{
+						"name": "SalesPersonID",
+						"type": "String"
+					},
+					{
+						"name": "TerritoryID",
+						"type": "String"
+					},
+					{
+						"name": "ShipMethodID",
+						"type": "String"
+					},
+					{
+						"name": "ProductID",
+						"type": "String"
+					},
+					{
+						"name": "OrderQty",
+						"type": "String"
+					},
+					{
+						"name": "UnitPrice",
+						"type": "String"
+					},
+					{
+						"name": "UnitPriceDiscount",
+						"type": "String"
+					},
+					{
+						"name": "LineTotal",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
@@ -1678,7 +3176,28 @@
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "BusinessEntityID",
+						"type": "String"
+					},
+					{
+						"name": "TerritoryID",
+						"type": "String"
+					},
+					{
+						"name": "SalesQuota",
+						"type": "String"
+					},
+					{
+						"name": "Bonus",
+						"type": "String"
+					},
+					{
+						"name": "CommissionPct",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
@@ -1710,7 +3229,32 @@
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "ShipMethodID",
+						"type": "String"
+					},
+					{
+						"name": "Name",
+						"type": "String"
+					},
+					{
+						"name": "ShipBase",
+						"type": "String"
+					},
+					{
+						"name": "ShipRate",
+						"type": "String"
+					},
+					{
+						"name": "rowguid",
+						"type": "String"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
@@ -1742,23 +3286,120 @@
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "TerritoryID",
+						"type": "String"
+					},
+					{
+						"name": "Name",
+						"type": "String"
+					},
+					{
+						"name": "CountryRegionCode",
+						"type": "String"
+					},
+					{
+						"name": "Group",
+						"type": "String"
+					},
+					{
+						"name": "SalesYTD",
+						"type": "String"
+					},
+					{
+						"name": "SalesLastYear",
+						"type": "String"
+					},
+					{
+						"name": "CostYTD",
+						"type": "String"
+					},
+					{
+						"name": "CostLastYear",
+						"type": "String"
+					},
+					{
+						"name": "rowguid",
+						"type": "String"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/dim_customers')]",
+			"name": "[concat(parameters('workspaceName'), '/dim_customer')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "demosynapsest-WorkspaceDefaultSqlServer",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"DBName": "dedicateddemosynapse"
+					"referenceName": "AzureSynapseAnalytics",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "sales/dw"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "CustomerID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "PersonID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "StoreID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TerritoryID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AccountNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "id_sk_customer",
+						"type": "bigint",
+						"precision": 19
 					}
+				],
+				"typeProperties": {
+					"schema": "",
+					"table": "dim_customer"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/dim_product')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics",
+					"type": "LinkedServiceReference"
 				},
 				"folder": {
 					"name": "sales/dw"
@@ -1768,11 +3409,105 @@
 				"schema": [],
 				"typeProperties": {
 					"schema": "",
-					"table": "dim_customer"
+					"table": "dim_product"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultSqlServer')]"
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/dim_salesperson')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "sales/dw"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "dim_salesperson"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/dim_shipmethod')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "sales/dw"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"table": "dim_shipmethod"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/dim_territory')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "sales/dw"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"table": "dim_territory"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/fact_sales')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "sales/dw"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "fact_sales"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/AzureSynapseAnalytics')]"
 			]
 		},
 		{
@@ -2343,6 +4078,25 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSynapseAnalytics')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSynapseAnalytics_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/PowerBI')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -2352,19 +4106,6 @@
 				"typeProperties": {
 					"workspaceID": "5bba8501-1b13-46b6-a367-e21e41e590a3",
 					"tenantID": "aa82e677-ede4-4f52-8609-25b997f58368"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/city_safety_chicago')]",
-			"type": "Microsoft.Synapse/workspaces/linkedServices",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"sasUri": "[parameters('city_safety_chicago_sasUri')]"
 				}
 			},
 			"dependsOn": []
@@ -2442,14 +4183,9 @@
 						},
 						"secretName": "sqlserver-onpremise-password"
 					}
-				},
-				"connectVia": {
-					"referenceName": "irdemosynapse",
-					"type": "IntegrationRuntimeReference"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/integrationRuntimes/irdemosynapse')]",
 				"[concat(variables('workspaceId'), '/linkedServices/kvrjz')]"
 			]
 		},
@@ -2483,6 +4219,99 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Load_Sales')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "adl_raw_sales",
+								"type": "DatasetReference"
+							},
+							"name": "sales"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_app_customers",
+								"type": "DatasetReference"
+							},
+							"name": "customers"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_app_product",
+								"type": "DatasetReference"
+							},
+							"name": "product"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_app_salesperson",
+								"type": "DatasetReference"
+							},
+							"name": "salesPerson"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_app_shipmethod",
+								"type": "DatasetReference"
+							},
+							"name": "shipmethod"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_app_territory",
+								"type": "DatasetReference"
+							},
+							"name": "territory"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "adl_app_sales",
+								"type": "DatasetReference"
+							},
+							"name": "appsales"
+						}
+					],
+					"transformations": [
+						{
+							"name": "JoinCustomers"
+						},
+						{
+							"name": "Aggregate"
+						},
+						{
+							"name": "JoinProduct"
+						},
+						{
+							"name": "JoinSalesperson"
+						},
+						{
+							"name": "Joinshipmethod"
+						},
+						{
+							"name": "JoinTerritory"
+						}
+					],
+					"script": "source(output(\n\t\tSalesOrderID as string,\n\t\tOrderDate as string,\n\t\tDueDate as string,\n\t\tShipDate as string,\n\t\tStatus as string,\n\t\tOnlineOrderFlag as string,\n\t\tCustomerID as integer,\n\t\tSalesPersonID as integer,\n\t\tTerritoryID as integer,\n\t\tShipMethodID as integer,\n\t\tProductID as integer,\n\t\tOrderQty as float,\n\t\tUnitPrice as float,\n\t\tUnitPriceDiscount as float,\n\t\tLineTotal as float\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> sales\nsource(output(\n\t\tCustomerID as integer,\n\t\tPersonID as integer,\n\t\tStoreID as integer,\n\t\tTerritoryID as integer,\n\t\tAccountNumber as string,\n\t\tModifiedDate as timestamp,\n\t\tid_sk_customer as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> customers\nsource(output(\n\t\tProductID as integer,\n\t\tName as string,\n\t\tProductNumber as string,\n\t\tMakeFlag as integer,\n\t\tFinishedGoodsFlag as integer,\n\t\tColor as string,\n\t\tSafetyStockLevel as integer,\n\t\tReorderPoint as integer,\n\t\tStandardCost as float,\n\t\tListPrice as float,\n\t\tSize as string,\n\t\tSizeUnitMeasureCode as string,\n\t\tWeightUnitMeasureCode as string,\n\t\tWeight as decimal(10,0),\n\t\tDaysToManufacture as integer,\n\t\tProductLine as string,\n\t\tClass as string,\n\t\tStyle as string,\n\t\tProductModelID as integer,\n\t\tSellStartDate as timestamp,\n\t\tSellEndDate as timestamp,\n\t\tDiscontinuedDate as timestamp,\n\t\tProductCategory as string,\n\t\tProductSubcategory as string,\n\t\tid_sk_product as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> product\nsource(output(\n\t\tBusinessEntityID as integer,\n\t\tTerritoryID as integer,\n\t\tSalesQuota as float,\n\t\tBonus as float,\n\t\tCommissionPct as float,\n\t\tid_sk_salesperson as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> salesPerson\nsource(output(\n\t\tShipMethodID as integer,\n\t\tName as string,\n\t\tShipBase as float,\n\t\tShipRate as float,\n\t\trowguid as string,\n\t\tModifiedDate as timestamp,\n\t\tid_sk_shipmethod as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> shipmethod\nsource(output(\n\t\tTerritoryID as integer,\n\t\tName as string,\n\t\tCountryRegionCode as string,\n\t\tGroup as string,\n\t\tSalesYTD as float,\n\t\tSalesLastYear as float,\n\t\tCostYTD as string,\n\t\tCostLastYear as float,\n\t\trowguid as string,\n\t\tModifiedDate as timestamp,\n\t\tid_sk_territory as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet') ~> territory\nsales, customers join(sales@CustomerID == customers@CustomerID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> JoinCustomers\nJoinTerritory aggregate(groupBy(id_sk_customer,\n\t\tOrderDate,\n\t\tid_sk_product,\n\t\tid_sk_salesperson,\n\t\tid_sk_shipmethod,\n\t\tid_sk_territory),\n\tOrderQty = sum(OrderQty),\n\t\tUnitPrice = sum(UnitPrice),\n\t\tUnitPriceDiscount = sum(UnitPriceDiscount),\n\t\tLineTotal = sum(LineTotal)) ~> Aggregate\nJoinCustomers, product join(sales@ProductID == product@ProductID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> JoinProduct\nJoinProduct, salesPerson join(SalesPersonID == BusinessEntityID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> JoinSalesperson\nJoinSalesperson, shipmethod join(sales@ShipMethodID == shipmethod@ShipMethodID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> Joinshipmethod\nJoinshipmethod, territory join(sales@TerritoryID == territory@TerritoryID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> JoinTerritory\nAggregate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tid_sk_customer as long,\n\t\tOrderDate as string,\n\t\tid_sk_product as long,\n\t\tid_sk_salesperson as long,\n\t\tid_sk_shipmethod as long,\n\t\tid_sk_territory as long,\n\t\tOrderQty as double,\n\t\tUnitPrice as double,\n\t\tUnitPriceDiscount as double,\n\t\tLineTotal as double\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['sales.parquet'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appsales"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/adl_raw_sales')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_customers')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_product')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_salesperson')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_shipmethod')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_territory')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_sales')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/load entities')]",
 			"type": "Microsoft.Synapse/workspaces/dataflows",
 			"apiVersion": "2019-06-01-preview",
@@ -2496,6 +4325,34 @@
 								"type": "DatasetReference"
 							},
 							"name": "Customers"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_raw_salesperson",
+								"type": "DatasetReference"
+							},
+							"name": "SalesPerson"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_raw_territory",
+								"type": "DatasetReference"
+							},
+							"name": "Territory"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_raw_shipmethod",
+								"type": "DatasetReference"
+							},
+							"name": "ShipMethod"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_raw_product",
+								"type": "DatasetReference"
+							},
+							"name": "Product"
 						}
 					],
 					"sinks": [
@@ -2505,19 +4362,67 @@
 								"type": "DatasetReference"
 							},
 							"name": "appcustomers"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_app_salesperson",
+								"type": "DatasetReference"
+							},
+							"name": "appsalesperson"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_app_territory",
+								"type": "DatasetReference"
+							},
+							"name": "appTerritory"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_app_shipmethod",
+								"type": "DatasetReference"
+							},
+							"name": "appShipmethod"
+						},
+						{
+							"dataset": {
+								"referenceName": "adl_app_product",
+								"type": "DatasetReference"
+							},
+							"name": "appProduct"
 						}
 					],
 					"transformations": [
 						{
 							"name": "SurrogateKeyCustomers"
+						},
+						{
+							"name": "SurrogateKeySalesPerson"
+						},
+						{
+							"name": "SurrogateKeyTerritory"
+						},
+						{
+							"name": "SurrogateKeyShipmethod"
+						},
+						{
+							"name": "SurrogateKeyProduct"
 						}
 					],
-					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Customers\nCustomers keyGenerate(output(id_sk_customer as long),\n\tstartAt: 1L) ~> SurrogateKeyCustomers\nSurrogateKeyCustomers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['customers'],\n\ttruncate: true,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appcustomers"
+					"script": "source(output(\n\t\tCustomerID as integer,\n\t\tPersonID as integer,\n\t\tStoreID as integer,\n\t\tTerritoryID as integer,\n\t\tAccountNumber as string,\n\t\tModifiedDate as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Customers\nsource(output(\n\t\tBusinessEntityID as integer,\n\t\tTerritoryID as integer,\n\t\tSalesQuota as float,\n\t\tBonus as float,\n\t\tCommissionPct as float\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> SalesPerson\nsource(output(\n\t\tTerritoryID as integer,\n\t\tName as string,\n\t\tCountryRegionCode as string,\n\t\tGroup as string,\n\t\tSalesYTD as float,\n\t\tSalesLastYear as float,\n\t\tCostYTD as string,\n\t\tCostLastYear as float,\n\t\trowguid as string,\n\t\tModifiedDate as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Territory\nsource(output(\n\t\tShipMethodID as integer,\n\t\tName as string,\n\t\tShipBase as float,\n\t\tShipRate as float,\n\t\trowguid as string,\n\t\tModifiedDate as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> ShipMethod\nsource(output(\n\t\tProductID as integer,\n\t\tName as string,\n\t\tProductNumber as string,\n\t\tMakeFlag as integer,\n\t\tFinishedGoodsFlag as integer,\n\t\tColor as string,\n\t\tSafetyStockLevel as integer,\n\t\tReorderPoint as integer,\n\t\tStandardCost as float,\n\t\tListPrice as float,\n\t\tSize as string,\n\t\tSizeUnitMeasureCode as string,\n\t\tWeightUnitMeasureCode as string,\n\t\tWeight as decimal(10,0),\n\t\tDaysToManufacture as integer,\n\t\tProductLine as string,\n\t\tClass as string,\n\t\tStyle as string,\n\t\tProductModelID as integer,\n\t\tSellStartDate as timestamp,\n\t\tSellEndDate as timestamp,\n\t\tDiscontinuedDate as timestamp,\n\t\tProductCategory as string,\n\t\tProductSubcategory as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Product\nCustomers keyGenerate(output(id_sk_customer as long),\n\tstartAt: 1L) ~> SurrogateKeyCustomers\nSalesPerson keyGenerate(output(id_sk_salesperson as long),\n\tstartAt: 1L) ~> SurrogateKeySalesPerson\nTerritory keyGenerate(output(id_sk_territory as long),\n\tstartAt: 1L) ~> SurrogateKeyTerritory\nShipMethod keyGenerate(output(id_sk_shipmethod as long),\n\tstartAt: 1L) ~> SurrogateKeyShipmethod\nProduct keyGenerate(output(id_sk_product as long),\n\tstartAt: 1L) ~> SurrogateKeyProduct\nSurrogateKeyCustomers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tCustomerID as integer,\n\t\tPersonID as integer,\n\t\tStoreID as integer,\n\t\tTerritoryID as integer,\n\t\tAccountNumber as string,\n\t\tModifiedDate as timestamp,\n\t\tid_sk_customer as long\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['customers.parquet'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appcustomers\nSurrogateKeySalesPerson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tBusinessEntityID as integer,\n\t\tTerritoryID as integer,\n\t\tSalesQuota as float,\n\t\tBonus as float,\n\t\tCommissionPct as float,\n\t\tid_sk_salesperson as long\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['salesperson.parquet'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appsalesperson\nSurrogateKeyTerritory sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tTerritoryID as integer,\n\t\tName as string,\n\t\tCountryRegionCode as string,\n\t\tGroup as string,\n\t\tSalesYTD as float,\n\t\tSalesLastYear as float,\n\t\tCostYTD as string,\n\t\tCostLastYear as float,\n\t\trowguid as string,\n\t\tModifiedDate as timestamp,\n\t\tid_sk_territory as long\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['territory.parquet'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appTerritory\nSurrogateKeyShipmethod sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tShipMethodID as integer,\n\t\tName as string,\n\t\tShipBase as float,\n\t\tShipRate as float,\n\t\trowguid as string,\n\t\tModifiedDate as timestamp,\n\t\tid_sk_shipmethod as long\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['shipmethod.parquet'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appShipmethod\nSurrogateKeyProduct sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tProductID as integer,\n\t\tName as string,\n\t\tProductNumber as string,\n\t\tMakeFlag as integer,\n\t\tFinishedGoodsFlag as integer,\n\t\tColor as string,\n\t\tSafetyStockLevel as integer,\n\t\tReorderPoint as integer,\n\t\tStandardCost as float,\n\t\tListPrice as float,\n\t\tSize as string,\n\t\tSizeUnitMeasureCode as string,\n\t\tWeightUnitMeasureCode as string,\n\t\tWeight as decimal(10,0),\n\t\tDaysToManufacture as integer,\n\t\tProductLine as string,\n\t\tClass as string,\n\t\tStyle as string,\n\t\tProductModelID as integer,\n\t\tSellStartDate as timestamp,\n\t\tSellEndDate as timestamp,\n\t\tDiscontinuedDate as timestamp,\n\t\tProductCategory as string,\n\t\tProductSubcategory as string,\n\t\tid_sk_product as long\n\t),\n\tformat: 'parquet',\n\tpartitionFileNames:['products.parquet'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> appProduct"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/datasets/adl_raw_customers')]",
-				"[concat(variables('workspaceId'), '/datasets/adl_app_customers')]"
+				"[concat(variables('workspaceId'), '/datasets/adl_raw_salesperson')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_raw_territory')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_raw_shipmethod')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_raw_product')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_customers')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_salesperson')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_territory')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_shipmethod')]",
+				"[concat(variables('workspaceId'), '/datasets/adl_app_product')]"
 			]
 		},
 		{
@@ -2531,6 +4436,66 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "--  This is auto-generated code\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK     'https://azureopendatastorage.blob.core.windows.net/citydatacontainer/Safety/Release/city=Boston/*.parquet',\n        FORMAT = 'parquet'\n    ) AS [result];",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "master",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/create_external_table_products')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "USE [sample]\nGO\n\nUSE [sample]\nGO\n\nCREATE MASTER KEY ENCRYPTION BY PASSWORD = '4Im3zNybHzadbDgaxW5nC9fJIGnwHzXb'\nGO\n\nDROP DATABASE SCOPED CREDENTIAL [sqlondemand]\nGO\n\nCREATE DATABASE SCOPED CREDENTIAL [sqlondemand]\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sp=r&st=2022-02-21T16:53:06Z&se=2022-02-22T00:53:06Z&spr=https&sv=2020-08-04&sr=c&sig=1%2BLfVw8E%2B1nfMRh1GrsemL%2Fzc87Vivd7w2WlFMuwVIs%3D'\n\ngo\n\n\nIF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\n\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'synapse_adldemost_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [synapse_adldemost_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION = 'abfss://synapse@adldemost.dfs.core.windows.net' ,\n\t\t CREDENTIAL = sqlondemand\n\t)\nGO\n\nCREATE EXTERNAL TABLE products (\n\t[ProductID] int,\n\t[Name] nvarchar(4000),\n\t[ProductNumber] nvarchar(4000),\n\t[MakeFlag] int,\n\t[FinishedGoodsFlag] int,\n\t[Color] nvarchar(4000),\n\t[SafetyStockLevel] int,\n\t[ReorderPoint] int,\n\t[StandardCost] real,\n\t[ListPrice] real,\n\t[Size] nvarchar(4000),\n\t[SizeUnitMeasureCode] nvarchar(4000),\n\t[WeightUnitMeasureCode] nvarchar(4000),\n\t[Weight] numeric(10,0),\n\t[DaysToManufacture] int,\n\t[ProductLine] nvarchar(4000),\n\t[Class] nvarchar(4000),\n\t[Style] nvarchar(4000),\n\t[ProductModelID] int,\n\t[SellStartDate] datetime2(7),\n\t[SellEndDate] datetime2(7),\n\t[DiscontinuedDate] datetime2(7),\n\t[ProductCategory] nvarchar(4000),\n\t[ProductSubcategory] nvarchar(4000),\n\t[id_sk_product] bigint\n\t)\n\tWITH (\n\tLOCATION = 'application/sales/products.parquet',\n\tDATA_SOURCE = [synapse_adldemost_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\n\nSELECT TOP 100 * FROM dbo.products\nGO",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "sample",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/drop_external_table_products')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "DROP EXTERNAL TABLE products\nGO\n\nDROP EXTERNAL DATA SOURCE [synapse_adldemost_dfs_core_windows_net] \nGO\n\nDROP EXTERNAL FILE FORMAT [SynapseParquetFormat] \nGO\n\n\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "sample",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/dedicateddemosynapse')]",
 			"type": "Microsoft.Synapse/workspaces/sqlPools",
 			"apiVersion": "2019-06-01-preview",
@@ -2540,7 +4505,7 @@
 				"annotations": []
 			},
 			"dependsOn": [],
-			"location": "southcentralus"
+			"location": "westeurope"
 		}
 	]
 }
