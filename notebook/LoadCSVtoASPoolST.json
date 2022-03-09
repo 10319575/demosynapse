@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "5b1a2b5f-395a-44cc-9d6f-b4d5fbbc099d"
+				"spark.autotune.trackingId": "f022ccb9-3d27-4a3e-8f8c-61277ef99f44"
 			}
 		},
 		"metadata": {
@@ -57,18 +57,19 @@
 				},
 				"source": [
 					"%%pyspark\r\n",
-					"df = spark.read.load('abfss://synapse@adldemost.dfs.core.windows.net/raw/MLExample/vuelos_20172018.csv', \r\n",
+					"df = spark.read.load('abfss://synapse@adldemost.dfs.core.windows.net/raw/MLExample/credit_train.csv', \r\n",
 					"                        format='csv', \r\n",
-					"                        sep=\";\",\r\n",
+					"                        sep=\",\",\r\n",
 					"                        header=True,\r\n",
 					"                        inferSchema=True\r\n",
 					"## If header exists uncomment line below\r\n",
 					"##, header=True\r\n",
 					")\r\n",
 					"# df.show()\r\n",
-					"df.printSchema()"
+					"df = df.drop('LoanID')\r\n",
+					"df.columns"
 				],
-				"execution_count": 4
+				"execution_count": 10
 			},
 			{
 				"cell_type": "code",
@@ -84,9 +85,9 @@
 					}
 				},
 				"source": [
-					"df.write.mode(\"overwrite\").saveAsTable(\"default.vuelos_20172018_ld\")"
+					"df.write.mode(\"overwrite\").saveAsTable(\"default.loans_training\")"
 				],
-				"execution_count": 5
+				"execution_count": 11
 			}
 		]
 	}
