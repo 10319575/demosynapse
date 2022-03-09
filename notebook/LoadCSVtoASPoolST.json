@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "a9acc184-1176-4dad-b0f1-0b3fae121562"
+				"spark.autotune.trackingId": "5b1a2b5f-395a-44cc-9d6f-b4d5fbbc099d"
 			}
 		},
 		"metadata": {
@@ -68,7 +68,7 @@
 					"# df.show()\r\n",
 					"df.printSchema()"
 				],
-				"execution_count": 1
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -86,7 +86,7 @@
 				"source": [
 					"df.write.mode(\"overwrite\").saveAsTable(\"default.vuelos_20172018_ld\")"
 				],
-				"execution_count": 2
+				"execution_count": 5
 			}
 		]
 	}
