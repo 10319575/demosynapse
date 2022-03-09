@@ -1,0 +1,66 @@
+{
+	"name": "HowToDeleteSparkTable",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "APSparkPoolST",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "e73f13a6-08ae-48b3-945d-8da3f02cabf9"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/d633e14e-b627-40ae-8c9a-7f0dc15c2bd7/resourceGroups/rauljareno/providers/Microsoft.Synapse/workspaces/demosynapsest/bigDataPools/APSparkPoolST",
+				"name": "APSparkPoolST",
+				"type": "Spark",
+				"endpoint": "https://demosynapsest.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/APSparkPoolST",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\n",
+					"sqlContext.sql(\"drop table `default`.`yourtablename`\")"
+				],
+				"execution_count": 9
+			}
+		]
+	}
+}
