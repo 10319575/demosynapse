@@ -4884,7 +4884,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "97f72fe4-a619-4603-a98d-668b2a12f1b6"
+						"spark.autotune.trackingId": "01ef189e-81c4-4e3d-b382-e72dccc2f284"
 					}
 				},
 				"metadata": {
@@ -5029,7 +5029,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "dbaad231-e362-4177-aa20-6d768dcbc4ba"
+						"spark.autotune.trackingId": "2dad790f-74d5-4c02-812a-a8cdde27de82"
 					}
 				},
 				"metadata": {
@@ -5080,7 +5080,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "1707149a-d3dd-4fca-8eda-29721977ceba"
+						"spark.autotune.trackingId": "2acb83d2-a18d-482b-b3a9-3199bb609064"
 					}
 				},
 				"metadata": {
@@ -5140,42 +5140,6 @@
 						"execution_count": 11
 					}
 				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Notebook 2')]",
-			"type": "Microsoft.Synapse/workspaces/notebooks",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"nbformat": 4,
-				"nbformat_minor": 2,
-				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
-					"numExecutors": 2,
-					"conf": {
-						"spark.dynamicAllocation.enabled": "false",
-						"spark.dynamicAllocation.minExecutors": "2",
-						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "d2f605f5-0f1f-4087-913a-c6e72f3990e9"
-					}
-				},
-				"metadata": {
-					"saveOutput": true,
-					"enableDebugMode": false,
-					"kernelspec": {
-						"name": "synapse_pyspark",
-						"display_name": "python"
-					},
-					"language_info": {
-						"name": "scala"
-					},
-					"sessionKeepAliveTimeout": 30
-				},
-				"cells": []
 			},
 			"dependsOn": []
 		},
