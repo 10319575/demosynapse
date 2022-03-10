@@ -1,0 +1,105 @@
+{
+	"name": "ml_loan_test_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "demosynapsest-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ML/sources"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "credit_test.csv",
+				"folderPath": "raw/MLExample",
+				"fileSystem": "synapse"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "LoanID",
+				"type": "String"
+			},
+			{
+				"name": "CustomerID",
+				"type": "String"
+			},
+			{
+				"name": "LoanStatus",
+				"type": "String"
+			},
+			{
+				"name": "CurrentLoanAmount",
+				"type": "String"
+			},
+			{
+				"name": "Term",
+				"type": "String"
+			},
+			{
+				"name": "CreditScore",
+				"type": "String"
+			},
+			{
+				"name": "AnnualIncome",
+				"type": "String"
+			},
+			{
+				"name": "Yearsincurrentjob",
+				"type": "String"
+			},
+			{
+				"name": "HomeOwnership",
+				"type": "String"
+			},
+			{
+				"name": "Purpose",
+				"type": "String"
+			},
+			{
+				"name": "MonthlyDebt",
+				"type": "String"
+			},
+			{
+				"name": "YearsofCreditHistory",
+				"type": "String"
+			},
+			{
+				"name": "Monthssincelastdelinquent",
+				"type": "String"
+			},
+			{
+				"name": "NumberofOpenAccounts",
+				"type": "String"
+			},
+			{
+				"name": "NumberofCreditProblems",
+				"type": "String"
+			},
+			{
+				"name": "CurrentCreditBalance",
+				"type": "String"
+			},
+			{
+				"name": "MaximumOpenCredit",
+				"type": "String"
+			},
+			{
+				"name": "Bankruptcies",
+				"type": "String"
+			},
+			{
+				"name": "TaxLiens",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

@@ -1,0 +1,109 @@
+{
+	"name": "loan_test_table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseAnalytics",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "ML/sinks"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "LoanID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CustomerID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LoanStatus",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CurrentLoanAmount",
+				"type": "real",
+				"precision": 7
+			},
+			{
+				"name": "Term",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CreditScore",
+				"type": "real",
+				"precision": 7
+			},
+			{
+				"name": "AnnualIncome",
+				"type": "real",
+				"precision": 7
+			},
+			{
+				"name": "Yearsincurrentjob",
+				"type": "nvarchar"
+			},
+			{
+				"name": "HomeOwnership",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Purpose",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MonthlyDebt",
+				"type": "real",
+				"precision": 7
+			},
+			{
+				"name": "YearsofCreditHistory",
+				"type": "real",
+				"precision": 7
+			},
+			{
+				"name": "Monthssincelastdelinquent",
+				"type": "real",
+				"precision": 7
+			},
+			{
+				"name": "NumberofOpenAccounts",
+				"type": "real",
+				"precision": 7
+			},
+			{
+				"name": "NumberofCreditProblems",
+				"type": "real",
+				"precision": 7
+			},
+			{
+				"name": "CurrentCreditBalance",
+				"type": "real",
+				"precision": 7
+			},
+			{
+				"name": "MaximumOpenCredit",
+				"type": "real",
+				"precision": 7
+			},
+			{
+				"name": "Bankruptcies",
+				"type": "real",
+				"precision": 7
+			},
+			{
+				"name": "TaxLiens",
+				"type": "real",
+				"precision": 7
+			}
+		],
+		"typeProperties": {
+			"schema": "ML",
+			"table": "loans_test"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}
