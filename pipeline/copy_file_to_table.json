@@ -230,7 +230,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ml_loan_test_csv",
+						"referenceName": "DelimitedText1",
 						"type": "DatasetReference"
 					}
 				],

@@ -1,12 +1,12 @@
 {
-	"name": "ml_loan_test_csv",
+	"name": "DelimitedText1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "demosynapsest-WorkspaceDefaultStorage",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "ML/sources"
+			"name": "ML"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
@@ -18,11 +18,9 @@
 				"fileSystem": "synapse"
 			},
 			"columnDelimiter": ",",
-			"rowDelimiter": "",
-			"encodingName": "UTF-8",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
-			"quoteChar": ""
+			"quoteChar": "\""
 		},
 		"schema": [
 			{
@@ -102,6 +100,5 @@
 				"type": "String"
 			}
 		]
-	},
-	"type": "Microsoft.Synapse/workspaces/datasets"
+	}
 }
