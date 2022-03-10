@@ -18,7 +18,7 @@
 				"fileSystem": "synapse"
 			},
 			"columnDelimiter": ",",
-			"rowDelimiter": "",
+			"rowDelimiter": "\r",
 			"escapeChar": "",
 			"firstRowAsHeader": true,
 			"quoteChar": ""
