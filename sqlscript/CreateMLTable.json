@@ -5,7 +5,7 @@
 			"name": "MLScripts"
 		},
 		"content": {
-			"query": "\nSET ANSI_NULLS ON\nGO\nSET QUOTED_IDENTIFIER ON\nGO\n\nCREATE TABLE [ML].[loans_test]\n( \n\tLoanID [nvarchar](max)  NULL,\n\tCustomerID [nvarchar](max)  NULL,\n\tLoanStatus [nvarchar](max)  NULL,\n\tCurrentLoanAmount [real]  NULL,\n\tTerm [nvarchar](max)  NULL,\n\tCreditScore [real] NULL,\n\tAnnualIncome [real] NULL,\n\tYearsincurrentjob [nvarchar](max)  NULL,\n\tHomeOwnership [nvarchar](max)  NULL,\n\tPurpose [nvarchar](max)  NULL,\n\tMonthlyDebt [real] NULL,\n\tYearsofCreditHistory [real] NULL,\n\tMonthssincelastdelinquent [real] NULL,\n\tNumberofOpenAccounts [real] NULL,\n\tNumberofCreditProblems [real] NULL,\n\tCurrentCreditBalance [real] NULL,\n\tMaximumOpenCredit [real] NULL,\n\tBankruptcies [real] NULL,\n\tTaxLiens [real] NULL\n)\nWITH\n(\n\tDISTRIBUTION = ROUND_ROBIN,\n\tHEAP\n)\nGO\n\n\n",
+			"query": "\nSET ANSI_NULLS ON\nGO\nSET QUOTED_IDENTIFIER ON\nGO\ndrop table [ML].[loans_test]\nCREATE TABLE [ML].[loans_test]\n( \n\tLoanID [nvarchar](max)  NULL,\n\tCustomerID [nvarchar](max)  NULL,\n\tCurrentLoanAmount [real]  NULL,\n\tTerm [nvarchar](max)  NULL,\n\tCreditScore [real] NULL,\n\tAnnualIncome [real] NULL,\n\tYearsincurrentjob [nvarchar](max)  NULL,\n\tHomeOwnership [nvarchar](max)  NULL,\n\tPurpose [nvarchar](max)  NULL,\n\tMonthlyDebt [real] NULL,\n\tYearsofCreditHistory [real] NULL,\n\tMonthssincelastdelinquent [real] NULL,\n\tNumberofOpenAccounts [real] NULL,\n\tNumberofCreditProblems [real] NULL,\n\tCurrentCreditBalance [real] NULL,\n\tMaximumOpenCredit [real] NULL,\n\tBankruptcies [real] NULL,\n\tTaxLiens [real] NULL\n)\nWITH\n(\n\tDISTRIBUTION = ROUND_ROBIN,\n\tHEAP\n)\nGO\n\n\n",
 			"metadata": {
 				"language": "sql"
 			},
