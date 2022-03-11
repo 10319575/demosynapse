@@ -1,5 +1,5 @@
 {
-	"name": "loan_test_table",
+	"name": "loan_test",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSynapseAnalytics",

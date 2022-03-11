@@ -1,5 +1,5 @@
 {
-	"name": "ml_loan_test_csv",
+	"name": "credit_test_csv",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "demosynapsest-WorkspaceDefaultStorage",

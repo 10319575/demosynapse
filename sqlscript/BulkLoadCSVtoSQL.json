@@ -1,0 +1,20 @@
+{
+	"name": "BulkLoadCSVtoSQL",
+	"properties": {
+		"folder": {
+			"name": "MLScripts"
+		},
+		"content": {
+			"query": "--Uncomment the 4 lines below to create a stored procedure for data pipeline orchestration​\n--CREATE PROC bulk_load_loans_test\n--AS\n--BEGIN\nCOPY INTO ML.loans_test\n(LoanID 1, CustomerID 2, LoanStatus 3, CurrentLoanAmount 4, Term 5, CreditScore 6, AnnualIncome 7, Yearsincurrentjob 8, HomeOwnership 9, Purpose 10, MonthlyDebt 11, YearsofCreditHistory 12, Monthssincelastdelinquent 13, NumberofOpenAccounts 14, NumberofCreditProblems 15, CurrentCreditBalance 16, MaximumOpenCredit 17, Bankruptcies 18, TaxLiens 19)\nFROM 'https://adldemost.dfs.core.windows.net/synapse/raw/MLExample/credit_test.csv'\nWITH\n(\n\tFILE_TYPE = 'CSV'\n\t,MAXERRORS = 0\n\t,ROWTERMINATOR = '\\n'\n\t,FIRSTROW = 2\n\t,ERRORFILE = 'https://adldemost.dfs.core.windows.net/synapse/'\n)\n--END\nGO\n\nSELECT TOP 100 * FROM ML.loans_test\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dedicateddemosynapse",
+				"poolName": "dedicateddemosynapse"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
