@@ -41,15 +41,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('workspaceName'), '/APSparkPoolST')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/00_main')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -2443,115 +2434,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/DelimitedText1')]",
-			"type": "Microsoft.Synapse/workspaces/datasets",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "demosynapsest-WorkspaceDefaultStorage",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "ML"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "credit_test.csv",
-						"folderPath": "raw/MLExample",
-						"fileSystem": "synapse"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "LoanID",
-						"type": "String"
-					},
-					{
-						"name": "CustomerID",
-						"type": "String"
-					},
-					{
-						"name": "LoanStatus",
-						"type": "String"
-					},
-					{
-						"name": "CurrentLoanAmount",
-						"type": "String"
-					},
-					{
-						"name": "Term",
-						"type": "String"
-					},
-					{
-						"name": "CreditScore",
-						"type": "String"
-					},
-					{
-						"name": "AnnualIncome",
-						"type": "String"
-					},
-					{
-						"name": "Yearsincurrentjob",
-						"type": "String"
-					},
-					{
-						"name": "HomeOwnership",
-						"type": "String"
-					},
-					{
-						"name": "Purpose",
-						"type": "String"
-					},
-					{
-						"name": "MonthlyDebt",
-						"type": "String"
-					},
-					{
-						"name": "YearsofCreditHistory",
-						"type": "String"
-					},
-					{
-						"name": "Monthssincelastdelinquent",
-						"type": "String"
-					},
-					{
-						"name": "NumberofOpenAccounts",
-						"type": "String"
-					},
-					{
-						"name": "NumberofCreditProblems",
-						"type": "String"
-					},
-					{
-						"name": "CurrentCreditBalance",
-						"type": "String"
-					},
-					{
-						"name": "MaximumOpenCredit",
-						"type": "String"
-					},
-					{
-						"name": "Bankruptcies",
-						"type": "String"
-					},
-					{
-						"name": "TaxLiens",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/demosynapsest-WorkspaceDefaultStorage')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/adl_app_customers')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
@@ -3637,7 +3519,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/loan_test_table')]",
+			"name": "[concat(parameters('workspaceName'), '/loan_test')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -3750,7 +3632,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/ml_loan_test_csv')]",
+			"name": "[concat(parameters('workspaceName'), '/credit_test_csv')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -4808,12 +4690,15 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/create_ML_table')]",
+			"name": "[concat(parameters('workspaceName'), '/CreateMLTable')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
+				"folder": {
+					"name": "MLScripts"
+				},
 				"content": {
-					"query": "\nSET ANSI_NULLS ON\nGO\nSET QUOTED_IDENTIFIER ON\nGO\n\nCREATE TABLE [ML].[loans_test]\n( \n\tLoanID [nvarchar](max)  NULL,\n\tCustomerID [nvarchar](max)  NULL,\n\tLoanStatus [nvarchar](max)  NULL,\n\tCurrentLoanAmount [real]  NULL,\n\tTerm [nvarchar](max)  NULL,\n\tCreditScore [real] NULL,\n\tAnnualIncome [real] NULL,\n\tYearsincurrentjob [nvarchar](max)  NULL,\n\tHomeOwnership [nvarchar](max)  NULL,\n\tPurpose [nvarchar](max)  NULL,\n\tMonthlyDebt [real] NULL,\n\tYearsofCreditHistory [real] NULL,\n\tMonthssincelastdelinquent [real] NULL,\n\tNumberofOpenAccounts [real] NULL,\n\tNumberofCreditProblems [real] NULL,\n\tCurrentCreditBalance [real] NULL,\n\tMaximumOpenCredit [real] NULL,\n\tBankruptcies [real] NULL,\n\tTaxLiens [real] NULL\n)\nWITH\n(\n\tDISTRIBUTION = ROUND_ROBIN,\n\tHEAP\n)\nGO\n\n\n",
+					"query": "\nSET ANSI_NULLS ON\nGO\nSET QUOTED_IDENTIFIER ON\nGO\nDROP TABLE [ML].[loans_test]\nCREATE TABLE [ML].[loans_test]\n( \n\tLoanID [nvarchar](max)  NULL,\n\tCustomerID [nvarchar](max)  NULL,\n\tCurrentLoanAmount [real]  NULL,\n\tTerm [nvarchar](max)  NULL,\n\tCreditScore [real] NULL,\n\tAnnualIncome [real] NULL,\n\tYearsincurrentjob [nvarchar](max)  NULL,\n\tHomeOwnership [nvarchar](max)  NULL,\n\tPurpose [nvarchar](max)  NULL,\n\tMonthlyDebt [real] NULL,\n\tYearsofCreditHistory [real] NULL,\n\tMonthssincelastdelinquent [real] NULL,\n\tNumberofOpenAccounts [real] NULL,\n\tNumberofCreditProblems [real] NULL,\n\tCurrentCreditBalance [real] NULL,\n\tMaximumOpenCredit [real] NULL,\n\tBankruptcies [real] NULL,\n\tTaxLiens [real] NULL\n)\nWITH\n(\n\tDISTRIBUTION = ROUND_ROBIN,\n\tHEAP\n)\nGO\n\n\n",
 					"metadata": {
 						"language": "sql"
 					},
@@ -4884,7 +4769,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "01ef189e-81c4-4e3d-b382-e72dccc2f284"
+						"spark.autotune.trackingId": "7de38796-249f-48ea-b608-a201faf92d5a"
 					}
 				},
 				"metadata": {
@@ -4902,7 +4787,6 @@
 				"cells": [
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"import azureml.core\n",
 							"\n",
@@ -4916,7 +4800,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"linkedService_name = \"azureMLst\"\n",
 							"experiment_name = \"demosynapsest-vuelos_20172018_ld-20220309120544\"\n",
@@ -4929,7 +4812,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"df = spark.sql(\"SELECT * FROM default.vuelos_20172018_ld\")\n",
 							"\n",
@@ -4941,7 +4823,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"from azureml.automl.core.forecasting_parameters import ForecastingParameters\n",
 							"\n",
@@ -4966,7 +4847,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"run = experiment.submit(automl_config)"
 						],
@@ -4975,7 +4855,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"displayHTML(\"<a href={} target='_blank'>Your experiment in Azure Machine Learning portal: {}</a>\".format(run.get_portal_url(), run.id))"
 						],
@@ -4984,7 +4863,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"run.wait_for_completion()\n",
 							"\n",
@@ -5029,7 +4907,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "2dad790f-74d5-4c02-812a-a8cdde27de82"
+						"spark.autotune.trackingId": "1778272c-4256-4ef9-a15d-f250a5abe454"
 					}
 				},
 				"metadata": {
@@ -5080,7 +4958,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "2acb83d2-a18d-482b-b3a9-3199bb609064"
+						"spark.autotune.trackingId": "814583aa-dc13-4979-bcb9-7e931e40732f"
 					}
 				},
 				"metadata": {
@@ -5154,6 +5032,224 @@
 			},
 			"dependsOn": [],
 			"location": "westeurope"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AutogeneratedAutoMLClassNotebook')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "8ff79fb6-a465-4dba-82b3-5779c6fa17c8"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"import azureml.core\n",
+							"\n",
+							"from azureml.core import Experiment, Workspace, Dataset, Datastore\n",
+							"from azureml.train.automl import AutoMLConfig\n",
+							"from notebookutils import mssparkutils\n",
+							"from azureml.data.dataset_factory import TabularDatasetFactory"
+						],
+						"outputs": [],
+						"execution_count": 19
+					},
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"linkedService_name = \"azureMLst\"\n",
+							"experiment_name = \"demosynapsest-loans_training-20220310041342\"\n",
+							"\n",
+							"ws = mssparkutils.azureML.getWorkspace(linkedService_name)\n",
+							"experiment = Experiment(ws, experiment_name)"
+						],
+						"outputs": [],
+						"execution_count": 20
+					},
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"df = spark.sql(\"SELECT * FROM default.loans_training\")\n",
+							"\n",
+							"datastore = Datastore.get_default(ws)\n",
+							"dataset = TabularDatasetFactory.register_spark_dataframe(df, datastore, name = experiment_name + \"-dataset\")"
+						],
+						"outputs": [],
+						"execution_count": 21
+					},
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"automl_settings = {'featurization':{'_blocked_transformers':[],'_column_purposes':{},'_transformer_params':{'Imputer':[]},'_drop_columns':['LoanID']}}\n",
+							"automl_config = AutoMLConfig(spark_context = sc,\n",
+							"                             task = \"classification\",\n",
+							"                             training_data = dataset,\n",
+							"                             label_column_name = \"LoanStatus\",\n",
+							"                             primary_metric = \"AUC_weighted\",\n",
+							"                             experiment_timeout_hours = 0.5,\n",
+							"                             max_concurrent_iterations = 2,\n",
+							"                             enable_onnx_compatible_models = True,\n",
+							"                             automl_settings = automl_settings)"
+						],
+						"outputs": [],
+						"execution_count": 22
+					},
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"run = experiment.submit(automl_config)"
+						],
+						"outputs": [],
+						"execution_count": 23
+					},
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"displayHTML(\"<a href={} target='_blank'>Your experiment in Azure Machine Learning portal: {}</a>\".format(run.get_portal_url(), run.id))"
+						],
+						"outputs": [],
+						"execution_count": 24
+					},
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"run.wait_for_completion()\n",
+							"\n",
+							"import onnxruntime\n",
+							"import mlflow\n",
+							"import mlflow.onnx\n",
+							"\n",
+							"from mlflow.models.signature import ModelSignature\n",
+							"from mlflow.types import DataType\n",
+							"from mlflow.types.schema import ColSpec, Schema\n",
+							"\n",
+							"# Get best model from automl run\n",
+							"best_run, onnx_model = run.get_output(return_onnx_model=True)\n",
+							"\n",
+							"# Define utility functions to infer the schema of ONNX model\n",
+							"def _infer_schema(data):\n",
+							"    res = []\n",
+							"    for _, col in enumerate(data):\n",
+							"        t = col.type.replace(\"tensor(\", \"\").replace(\")\", \"\")\n",
+							"        if t in [\"bool\"]:\n",
+							"            dt = DataType.boolean\n",
+							"        elif t in [\"int8\", \"uint8\", \"int16\", \"uint16\", \"int32\"]:\n",
+							"            dt = DateType.integer\n",
+							"        elif t in [\"uint32\", \"int64\"]:\n",
+							"            dt = DataType.long\n",
+							"        elif t in [\"float16\", \"bfloat16\", \"float\"]:\n",
+							"            dt = DataType.float\n",
+							"        elif t in [\"double\"]:\n",
+							"            dt = DataType.double\n",
+							"        elif t in [\"string\"]:\n",
+							"            dt = DataType.string\n",
+							"        else:\n",
+							"            raise Exception(\"Unsupported type: \" + t)\n",
+							"        res.append(ColSpec(type=dt, name=col.name))\n",
+							"    return Schema(res)\n",
+							"\n",
+							"def _infer_signature(onnx_model):\n",
+							"    onnx_model_bytes = onnx_model.SerializeToString()\n",
+							"    onnx_runtime = onnxruntime.InferenceSession(onnx_model_bytes)\n",
+							"    inputs = _infer_schema(onnx_runtime.get_inputs())\n",
+							"    outputs = _infer_schema(onnx_runtime.get_outputs())\n",
+							"    return ModelSignature(inputs, outputs)\n",
+							"\n",
+							"# Infer signature of ONNX model\n",
+							"signature = _infer_signature(onnx_model)\n",
+							"\n",
+							"artifact_path = experiment_name + \"_artifact\"\n",
+							"mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri())\n",
+							"mlflow.set_experiment(experiment_name)\n",
+							"\n",
+							"with mlflow.start_run() as run:\n",
+							"    # Save the model to the outputs directory for capture\n",
+							"    mlflow.onnx.log_model(onnx_model, artifact_path, signature=signature)\n",
+							"\n",
+							"    # Register the model to AML model registry\n",
+							"    mlflow.register_model(\"runs:/\" + run.info.run_id + \"/\" + artifact_path, \"demosynapsest-loans_training-20220310041342-Best\")"
+						],
+						"outputs": [],
+						"execution_count": 25
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/BulkLoadCSVtoSQL')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "MLScripts"
+				},
+				"content": {
+					"query": "--Uncomment the 4 lines below to create a stored procedure for data pipeline orchestration​\n--CREATE PROC bulk_load_loans_test\n--AS\n--BEGIN\nCOPY INTO ML.loans_test\n(LoanID 1, CustomerID 2, CurrentLoanAmount 3, Term 4, CreditScore 5, AnnualIncome 6, Yearsincurrentjob 7, HomeOwnership 8, Purpose 9, MonthlyDebt 10, YearsofCreditHistory 11, Monthssincelastdelinquent 12, NumberofOpenAccounts 13, NumberofCreditProblems 14, CurrentCreditBalance 15, MaximumOpenCredit 16, Bankruptcies 17, TaxLiens 18)\nFROM 'https://adldemost.dfs.core.windows.net/synapse/raw/MLExample/credit_test.csv'\nWITH\n(\n\tFILE_TYPE = 'CSV'\n\t,MAXERRORS = 0\n\t,FIRSTROW = 2\n\t,ERRORFILE = 'https://adldemost.dfs.core.windows.net/synapse/'\n)\n--END\nGO\n\nSELECT TOP 100 * FROM ML.loans_test\nGO",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "dedicateddemosynapse",
+						"poolName": "dedicateddemosynapse"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "-- Create a stored procedure for storing the scoring script.\nCREATE PROCEDURE [ML].[StoreProcedurePred]\nAS\nBEGIN\n-- Select input scoring data and assign aliases.\nWITH InputData AS\n(\n    SELECT\n        TOP 1\n        CAST([CustomerID] AS [varchar]) AS [CustomerID],\n        CAST([CurrentLoanAmount] AS [bigint]) AS [CurrentLoanAmount],\n        CAST([Term] AS [varchar]) AS [Term],\n        [CreditScore],\n        [AnnualIncome],\n        CAST([Yearsincurrentjob] AS [varchar]) AS [Yearsincurrentjob],\n        CAST([HomeOwnership] AS [varchar]) AS [HomeOwnership],\n        CAST([Purpose] AS [varchar]) AS [Purpose],\n        [MonthlyDebt],\n        [YearsofCreditHistory],\n        [Monthssincelastdelinquent],\n        CAST([NumberofOpenAccounts] AS [bigint]) AS [NumberofOpenAccounts],\n        CAST([NumberofCreditProblems] AS [bigint]) AS [NumberofCreditProblems],\n        CAST([CurrentCreditBalance] AS [bigint]) AS [CurrentCreditBalance],\n        [MaximumOpenCredit],\n        [Bankruptcies],\n        [TaxLiens]\n    FROM [ML].[loans_test]\n)\n-- Using T-SQL Predict command to score machine learning models. \nSELECT *\nFROM PREDICT (MODEL = (SELECT [model] FROM [ML].[predictions] WHERE [ID] = 'demosynapsest-loans_training-20220310041342-Best:1'),\n              DATA = InputData,\n              RUNTIME = ONNX) WITH ([prediction] [varchar], [probabity] [real])\nEND\nGO\n\n-- Execute the above stored procedure.\nEXEC [ML].[StoreProcedurePred]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "dedicateddemosynapse",
+						"poolName": "dedicateddemosynapse"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
 		}
 	]
 }
