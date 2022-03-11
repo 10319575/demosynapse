@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "-- Create a stored procedure for storing the scoring script.\nCREATE PROCEDURE [ML].[StoreProcedurePred]\nAS\nBEGIN\n-- Select input scoring data and assign aliases.\nWITH InputData AS\n(\n    SELECT\n        TOP 1\n        CAST([CustomerID] AS [varchar]) AS [CustomerID],\n        CAST([CurrentLoanAmount] AS [bigint]) AS [CurrentLoanAmount],\n        CAST([Term] AS [varchar]) AS [Term],\n        [CreditScore],\n        [AnnualIncome],\n        CAST([Yearsincurrentjob] AS [varchar]) AS [Yearsincurrentjob],\n        CAST([HomeOwnership] AS [varchar]) AS [HomeOwnership],\n        CAST([Purpose] AS [varchar]) AS [Purpose],\n        [MonthlyDebt],\n        [YearsofCreditHistory],\n        [Monthssincelastdelinquent],\n        CAST([NumberofOpenAccounts] AS [bigint]) AS [NumberofOpenAccounts],\n        CAST([NumberofCreditProblems] AS [bigint]) AS [NumberofCreditProblems],\n        CAST([CurrentCreditBalance] AS [bigint]) AS [CurrentCreditBalance],\n        [MaximumOpenCredit],\n        [Bankruptcies],\n        [TaxLiens]\n    FROM [ML].[loans_test]\n)\n-- Using T-SQL Predict command to score machine learning models. \nSELECT *\nFROM PREDICT (MODEL = (SELECT [model] FROM [ML].[predictions] WHERE [ID] = 'demosynapsest-loans_training-20220310041342-Best:1'),\n              DATA = InputData,\n              RUNTIME = ONNX) WITH ([prediction] [varchar], [probabity] [real])\nEND\nGO\n\n-- Execute the above stored procedure.\nEXEC [ML].[StoreProcedurePred]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dedicateddemosynapse",
+				"poolName": "dedicateddemosynapse"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
