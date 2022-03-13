@@ -3,6 +3,10 @@
 	"properties": {
 		"nbformat": 4,
 		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "APSparkPoolST",
+			"type": "BigDataPoolReference"
+		},
 		"sessionProperties": {
 			"driverMemory": "28g",
 			"driverCores": 4,
@@ -13,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "b4809ef4-d593-4adf-a4e2-d7fc913063b0"
+				"spark.autotune.trackingId": "f2857e30-1616-4fac-ae9e-7f9cd88235c8"
 			}
 		},
 		"metadata": {
@@ -25,6 +29,21 @@
 			},
 			"language_info": {
 				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/d633e14e-b627-40ae-8c9a-7f0dc15c2bd7/resourceGroups/rauljareno/providers/Microsoft.Synapse/workspaces/demosynapsest/bigDataPools/APSparkPoolST",
+				"name": "APSparkPoolST",
+				"type": "Spark",
+				"endpoint": "https://demosynapsest.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/APSparkPoolST",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -56,7 +75,7 @@
 					"nyc_tlc_df = nyc_tlc.to_pandas_dataframe()\r\n",
 					"nyc_tlc_df.info()"
 				],
-				"execution_count": null
+				"execution_count": 1
 			},
 			{
 				"cell_type": "code",
@@ -76,9 +95,9 @@
 					"from IPython.display import display\r\n",
 					"\r\n",
 					"sampled_df = nyc_tlc_df.sample(n=10000, random_state=123)\r\n",
-					"display(sampled_df.head(5))"
+					"display(sampled_df.head(10))"
 				],
-				"execution_count": null
+				"execution_count": 3
 			},
 			{
 				"cell_type": "markdown",
@@ -139,7 +158,7 @@
 					"display(featurized_df.head(5))\r\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -165,7 +184,7 @@
 					"\r\n",
 					"filtered_df.info()"
 				],
-				"execution_count": null
+				"execution_count": 5
 			},
 			{
 				"cell_type": "markdown",
@@ -198,7 +217,7 @@
 					"spark_df = spark.createDataFrame(filtered_df)\r\n",
 					"spark_df.write.mode(\"overwrite\").saveAsTable(\"default.NYC_Taxi\")"
 				],
-				"execution_count": null
+				"execution_count": 6
 			}
 		]
 	}
