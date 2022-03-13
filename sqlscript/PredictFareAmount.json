@@ -1,0 +1,20 @@
+{
+	"name": "PredictFareAmount",
+	"properties": {
+		"folder": {
+			"name": "MLScripts"
+		},
+		"content": {
+			"query": "-- Create a stored procedure for storing the scoring script.\nCREATE PROCEDURE [ML].[TaxiPredict]\nAS\nBEGIN\n-- Select input scoring data and assign aliases.\n--ALTER TABLE [ML].[NYCTaxi]\n--ALTER COLUMN pickupTimeBin nvarchar(30);\n\nSELECT\n    TOP 2\n    [tipped],\n    [paymentType],\n    [passengerCount],\n    CAST([tripDistance] AS [real]) AS [tripDistance],\n    [tripTimeSecs],\n    CAST([pickupTimeBin] AS [varchar]) AS [pickupTimeBin]\nFROM [ML].[NYCTaxi]\n\n-- Using T-SQL Predict command to score machine learning models. \nSELECT *\nFROM PREDICT (MODEL = (SELECT [model] FROM [ML].[models] WHERE [ID] = 'demosynapsest-nyc_taxi-20220313083601-Best:1'),\n              DATA = [ML].[NYCTaxi],\n              RUNTIME = ONNX) WITH ([prediction] [real])\nEND\nGO\n\n-- Execute the above stored procedure.\nEXEC [ML].[TaxiPredict]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dedicateddemosynapse",
+				"poolName": "dedicateddemosynapse"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
